@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "@nuxtjs"
+  ],
+  "baseBranches": [
+    "main"
+  ],
+  "rangeStrategy": "pin",
+  "ignoreDeps": [
+    "docus"
+  ]
+}

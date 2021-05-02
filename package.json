@@ -1,0 +1,54 @@
+{
+  "name": "cuby-generator",
+  "version": "1.0.0",
+  "private": true,
+  "contributors": [
+    {
+      "name": "Thorn-Welf Walli",
+      "email": "lammpee@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ThornWalli/cuby-generator"
+  },
+  "scripts": {
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable",
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
+    "lint": "npm run lint:js && npm run lint:style",
+    "test": "npm run lint && npm run generate"
+  },
+  "dependencies": {
+    "@js-basics/vector": "^1.57.0",
+    "core-js": "^3.9.1",
+    "eslint-plugin-no-secrets": "^0.8.9",
+    "eslint-plugin-security": "^1.4.0",
+    "file-saver": "^2.0.5",
+    "husky": "^6.0.0",
+    "nuxt": "^2.15.3",
+    "nuxt-speedkit": "^1.2.4",
+    "pinst": "^2.1.6",
+    "seedrandom": "^3.0.5",
+    "stylelint-config-recess-order": "^2.4.0",
+    "vue-svg-loader": "^0.16.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^6.0.0",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/stylelint-module": "^4.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.22.0",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-plugin-vue": "^7.7.0",
+    "stylelint": "^13.12.0",
+    "stylelint-config-standard": "^21.0.0"
+  }
+}

@@ -1,0 +1,282 @@
+<template>
+  <div class="face-generator" :class="{'js--wait': renderTimeout}">
+    <atom-preview v-if="hasPreview" class="face-generator__preview" v-bind="previewData" />
+    <div class="face-generator__controls face-generator__controls--left-bottom face-generator__properties">
+      <span class="separator" />
+      <slot name="controlsBefore" />
+      <molecule-property v-model="dimension" v-bind="propertyDimension" :value="dimension" />
+      <molecule-property v-model="renderType" v-bind="propertyRenderType" :value="renderType" />
+      <molecule-property v-model="mode" v-bind="propertyMode" :value="mode" />
+      <slot name="controlsAfter" />
+    </div>
+    <div class="face-generator__controls face-generator__controls--left-top">
+      <atom-base-button tag="a" :href="previewData.src" :download="`${filename}.png`">
+        Download
+      </atom-base-button>
+    </div>
+
+    <div class="face-generator__controls face-generator__controls--right-top">
+      <slot name="controlsRightTop" />
+    </div>
+  </div>
+</template>
+<script>
+import assetManager from '@/services/assetManager';
+import { COLORS } from '@/utils/color';
+import { ipoint } from '@js-basics/vector';
+
+import AtomPreview from '@/components/atoms/Preview';
+import AtomBaseButton from '@/components/atoms/BaseButton';
+import MoleculeProperty from '@/components/molecule/Property';
+
+import Face from '@/classes/renderType/Face';
+import TileWall from '@/classes/renderType/TileWall';
+import ItemSelect from '@/components/molecule/property/ItemSelect';
+
+import SvgControlsDimension from '@/assets/svg/controls/controls_dimension.svg?vue-template';
+import SvgControlsMode from '@/assets/svg/controls/controls_mode.svg?vue-template';
+import SvgControlsModeColor from '@/assets/svg/controls/controls_mode_color.svg?vue-template';
+import SvgControlsModeAlpha from '@/assets/svg/controls/controls_mode_alpha.svg?vue-template';
+
+import SvgControlsType from '@/assets/svg/controls/controls_type.svg?vue-template';
+
+import { MODE } from '../classes/AssetManager';
+import { getProperty } from '../classes/renderType/properties';
+
+export default {
+  components: { AtomPreview, AtomBaseButton, MoleculeProperty },
+  props: {
+    hasPreview: {
+      type: Boolean,
+      default: true
+    },
+    config: {
+      type: Function,
+      default () {
+        return {
+          color: () => COLORS[0],
+          face: () => [2, 2, 2]
+        };
+      }
+    },
+    filename: {
+      type: String,
+      default: 'image'
+    }
+  },
+  data () {
+    const renderTypes = [new Face(), new TileWall()];
+
+    return {
+      screen,
+      currentRenderType: null,
+      renderTimeout: null,
+      model: {},
+      renderFn: null,
+      mode: MODE.COLOR,
+      dimension: getScreenDimension(),
+      renderTypes,
+      renderType: this.$route.query.renderType || renderTypes[0].name,
+      previewData: {
+        // eslint-disable-next-line no-secrets/no-secrets
+        src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+        size: ipoint(0, 0)
+      }
+    };
+  },
+  computed: {
+
+    propertyDimension () {
+      return getProperty('dimension', 'dimension', 'Dimension', {
+        icon: SvgControlsDimension,
+        options: { screenApply: true }
+      });
+    },
+
+    propertyMode () {
+      const icons = {
+        [MODE.COLOR]: SvgControlsModeColor,
+        [MODE.ALPHA]: SvgControlsModeAlpha
+      };
+      return {
+        icon: SvgControlsMode,
+        component: ItemSelect,
+        options: {
+          items: Object.entries(MODE).map(([label, value]) => {
+            return {
+              component: icons[String(value)],
+              label,
+              value
+            };
+          })
+        }
+      };
+    },
+
+    propertyRenderType () {
+      return {
+        icon: SvgControlsType,
+        component: ItemSelect,
+        options: {
+          items: this.renderTypes.map((type) => {
+            return {
+              component: type.icon,
+              label: type.name,
+              value: type.name
+            };
+          })
+        }
+      };
+    },
+
+    size () {
+      return ipoint(this.dimension[0], this.dimension[1]);
+    },
+    modeOptions () {
+      return Object.entries(MODE).map(([label, value]) => {
+        return {
+          label,
+          value
+        };
+      });
+    },
+    renderTypeOptions () {
+      return this.renderTypes.map((type) => {
+        return {
+          label: type.name,
+          value: type.name
+        };
+      });
+    }
+  },
+  watch: {
+    mode () {
+      this.render();
+    },
+    size () {
+      this.render();
+    },
+    renderType: {
+      async handler (name, lastValue) {
+        await assetManager.ready;
+        if (lastValue) {
+          this.$router.replace({
+            query: Object.assign({}, this.$route.query, {
+              renderType: this.renderType
+            })
+          });
+        }
+
+        this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
+        this.render();
+        this.$emit('renderType', this.currentRenderType);
+      },
+      immediate: true
+    }
+  },
+  async mounted () {
+    await assetManager.setup();
+  },
+  methods: {
+    setPreview (data) {
+      this.previewData = data;
+      this.$emit('previewData', data);
+    },
+    getProp (name) {
+      return this[String(name)];
+    },
+    render () {
+      if (this.currentRenderType) {
+        global.clearTimeout(this.renderTimeout);
+        this.renderTimeout = global.setTimeout(() => {
+          const [width, height] = this.dimension;
+          this.setPreview({
+            src: this.currentRenderType.draw({ width, height, mode: this.mode }, this.config()).toDataURL(),
+            size: ipoint(width, height)
+          });
+          this.renderTimeout = null;
+        }, 500);
+      }
+    }
+
+  }
+};
+
+function getScreenDimension () {
+  const screen = global.screen;
+  let dimension = [window.innerWidth, window.innerHeight];
+  if (screen) {
+    dimension = [screen.width, screen.height];
+  }
+  return dimension;
+}
+
+</script>
+
+<style lang="postcss" scoped>
+.face-generator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  & .face-generator__preview {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s;
+  }
+
+  &.js--wait {
+    & .face-generator__preview {
+      transform: scale(1.1);
+    }
+  }
+
+  & .face-generator__controls {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+
+    &.face-generator__properties {
+      @media (max-width: 1200px) {
+        & > * {
+          & >>> > button svg {
+            width: calc(48 / 16 * 1rem);
+          }
+        }
+      }
+
+      @media (max-width: 768px) {
+        & > * {
+          & >>> > button svg {
+            width: calc(48 / 16 * 1rem);
+          }
+        }
+      }
+    }
+
+    &.face-generator__controls--left-bottom {
+      right: calc(20 / 16 * 1rem);
+      bottom: calc(20 / 16 * 1rem);
+      left: calc(20 / 16 * 1rem);
+      display: flex;
+      align-items: flex-start;
+    }
+
+    &.face-generator__controls--right-top {
+      top: calc(20 / 16 * 1rem);
+      right: calc(20 / 16 * 1rem);
+      display: flex;
+      align-items: center;
+    }
+
+    &.face-generator__controls--left-top {
+      top: calc(20 / 16 * 1rem);
+      left: calc(20 / 16 * 1rem);
+    }
+  }
+}
+
+</style>
