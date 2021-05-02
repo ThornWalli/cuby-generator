@@ -87,7 +87,7 @@ export default {
         {
           weight: 300,
           style: 'italic',
-          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-300Italic.woff2', type: 'woff2' }]
+          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-300italic.woff2', type: 'woff2' }]
         },
         {
           weight: 400,
@@ -107,7 +107,7 @@ export default {
         {
           weight: 600,
           style: 'italic',
-          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-600Italic.woff2', type: 'woff2' }]
+          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-600italic.woff2', type: 'woff2' }]
         },
         {
           weight: 700,
@@ -117,7 +117,7 @@ export default {
         {
           weight: 700,
           style: 'italic',
-          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-700Italic.woff2', type: 'woff2' }]
+          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-700italic.woff2', type: 'woff2' }]
         },
         {
           weight: 800,
@@ -127,7 +127,7 @@ export default {
         {
           weight: 800,
           style: 'italic',
-          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-800Italic.woff2', type: 'woff2' }]
+          sources: [{ src: '@/assets/fonts/open-sans-v18-latin/open-sans-v18-latin-800italic.woff2', type: 'woff2' }]
         }
       ]
     }]
