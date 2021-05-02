@@ -48,7 +48,11 @@ export default class TileWall extends RenderType {
       relativeOffset
     }) {
       this.setSize(width, height);
-      const [colorA, colorB] = color;
+      let [colorA, colorB] = color;
+
+      colorA = colorA || (() => 'transparent');
+      colorB = colorB || (() => 'transparent');
+
       const [relativeOffsetX, relativeOffsetY] = relativeOffset;
       const context = this.context;
 
