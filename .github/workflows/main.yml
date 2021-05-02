@@ -87,7 +87,8 @@ jobs:
           key: ${{ matrix.os }}-node-v${{ matrix.node }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/package-lock.json')) }}
       - name: Build
         run: |
-          npm run generate -- examples/default
+          npm run generate
+          touch dist/.nojekyll
         env:
           WEBSITE_HOST: https://cuby.lammpee.de
           BASE_URL: /
