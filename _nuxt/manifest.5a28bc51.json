@@ -1,6 +1,7 @@
 {
   "name": "cuby-generator",
   "short_name": "cuby-generator",
+  "description": "A tool to generate Cuby textures, avatars and wallpapers.",
   "icons": [
     {
       "src": "/_nuxt/icons/icon_64x64.ccf292.png",
