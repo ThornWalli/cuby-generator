@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.9](https://github.com/ThornWalli/cuby-generator/compare/v1.0.8...v1.0.9) (2021-05-03)
+
+
+### Bug Fixes
+
+* **update:** improve ui ([5712123](https://github.com/ThornWalli/cuby-generator/commit/5712123244b8c929317ec3df899df1f1656f98d5))
+
 ## [1.0.8](https://github.com/ThornWalli/cuby-generator/compare/v1.0.7...v1.0.8) (2021-05-03)
 
 
