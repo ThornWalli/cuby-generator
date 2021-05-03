@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.11](https://github.com/ThornWalli/cuby-generator/compare/v1.0.10...v1.0.11) (2021-05-03)
+
+
+### Bug Fixes
+
+* **color:** fix initial color ([d40bcf3](https://github.com/ThornWalli/cuby-generator/commit/d40bcf38faba9a946e17351749fa96102291d508))
+
 ## [1.0.10](https://github.com/ThornWalli/cuby-generator/compare/v1.0.9...v1.0.10) (2021-05-03)
 
 
