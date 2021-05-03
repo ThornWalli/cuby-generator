@@ -26,17 +26,55 @@ export default {
   },
 
   head: {
-    title: 'cuby-generator',
+    title: 'Cuby Generator',
     htmlAttrs: {
       lang: 'en'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      {
+        hid: 'google',
+        name: 'google',
+        content: 'notranslate'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'A tool to generate Cuby textures, avatars and wallpapers'
+      },
+      {
+        property: 'og:type',
+        content: 'website'
+      },
+      {
+        property: 'og:sitename',
+        content: 'Cuby Generator'
+      },
+      {
+        property: 'og:title',
+        content: 'Cuby Generator'
+      },
+      {
+        property: 'og:description',
+        content: 'A tool to generate Cuby textures, avatars and wallpapers'
+      },
+      {
+        property: 'og:image',
+        content: `${getWebsiteHost()}/sharing.png`
+      },
+      {
+        property: 'og:image:width',
+        content: 2400
+      },
+      {
+        property: 'og:image:height',
+        content: 1260
+      },
+      {
+        property: 'og:url',
+        content: getWebsiteHost()
+      }
     ]
   },
 
@@ -186,4 +224,8 @@ function getPort () {
 
 function getDistPath () {
   return process.env.npm_config_dist || process.env.DIST_PATH || 'dist';
+}
+
+function getWebsiteHost () {
+  return process.env.npm_config_website_host || process.env.WEBSITE_HOST || 'http://localhost:8050';
 }
