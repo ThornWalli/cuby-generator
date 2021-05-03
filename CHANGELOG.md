@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.4](https://github.com/ThornWalli/cuby-generator/compare/v1.0.3...v1.0.4) (2021-05-03)
+
+
+### Bug Fixes
+
+* **style:** fix font-size ([ee64a5c](https://github.com/ThornWalli/cuby-generator/commit/ee64a5cf5fcf87c0bdd1518dcfb6e118328eac98))
+
 ## [1.0.3](https://github.com/ThornWalli/cuby-generator/compare/v1.0.2...v1.0.3) (2021-05-03)
 
 
