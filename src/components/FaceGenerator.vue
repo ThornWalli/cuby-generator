@@ -240,19 +240,9 @@ function getScreenDimension () {
     flex-direction: column;
 
     &.face-generator__properties {
-      @media (max-width: 1200px) {
-        & > * {
-          & >>> > button svg {
-            width: calc(48 / 16 * 1rem);
-          }
-        }
-      }
-
-      @media (max-width: 768px) {
-        & > * {
-          & >>> > button svg {
-            width: calc(48 / 16 * 1rem);
-          }
+      & > * {
+        & >>> > button svg {
+          width: calc(48 / 16 * 1rem);
         }
       }
     }

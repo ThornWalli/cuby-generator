@@ -26,13 +26,7 @@ export default {
 .atom-base-button {
   display: block;
   padding: calc(10 / 16 * 1rem) calc(20 / 16 * 1rem);
-  font-size: calc(16 / 16 * 1rem);
-
-  @media (min-width: 768px) {
-    font-size: calc(24 / 16 * 1rem);
-  }
-
-  line-height: 1;
+  font-size: calc(24 / 16 * 1rem);
   color: #fff;
   text-decoration: none;
   letter-spacing: 0;
