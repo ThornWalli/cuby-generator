@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.6](https://github.com/ThornWalli/cuby-generator/compare/v1.0.5...v1.0.6) (2021-05-03)
+
+
+### Bug Fixes
+
+* **update:** add deep link feature ([71ca353](https://github.com/ThornWalli/cuby-generator/commit/71ca353c24980dcff5ec38b8a30aa324c40cd811))
+
 ## [1.0.5](https://github.com/ThornWalli/cuby-generator/compare/v1.0.4...v1.0.5) (2021-05-03)
 
 
