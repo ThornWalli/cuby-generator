@@ -57,7 +57,7 @@ export default {
         color = [this.$route.query.color];
       }
     } else {
-      color = [COLORS[0]];
+      color = [COLORS[4]];
     }
 
     const eyeLeft = (assetManager.getAssetsByType(TYPES.EYE_LEFT)[this.$route.query.eyeLeft] && this.$route.query.eyeLeft) || 2;
