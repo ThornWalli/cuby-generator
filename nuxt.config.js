@@ -41,7 +41,7 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'A tool to generate Cuby textures, avatars and wallpapers'
+        content: pkg.description
       },
       {
         property: 'og:type',
@@ -57,7 +57,7 @@ export default {
       },
       {
         property: 'og:description',
-        content: 'A tool to generate Cuby textures, avatars and wallpapers'
+        content: pkg.description
       },
       {
         property: 'og:image',

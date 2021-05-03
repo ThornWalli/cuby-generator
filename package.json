@@ -1,5 +1,6 @@
 {
   "name": "cuby-generator",
+  "description": "A tool to generate Cuby textures, avatars and wallpapers.",
   "version": "1.0.1",
   "private": true,
   "contributors": [
