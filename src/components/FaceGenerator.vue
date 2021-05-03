@@ -173,20 +173,14 @@ export default {
     model: {
       handler (model) {
         this.render();
-        this.$router.replace({
-          query: Object.assign({}, this.$route.query, model)
-        });
+        this.updateRoute();
       },
       deep: true
     },
     renderType: {
       async handler (name, lastValue) {
         await assetManager.ready;
-        this.$router.replace({
-          query: Object.assign({}, this.$route.query, {
-            renderType: name
-          })
-        });
+        this.updateRoute();
 
         this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
         this.render();
@@ -199,6 +193,15 @@ export default {
     await assetManager.setup();
   },
   methods: {
+    updateRoute () {
+      global.setTimeout(() => {
+        this.$router.replace({
+          query: Object.assign({}, this.$route.query, this.model, {
+            renderType: this.renderType
+          })
+        });
+      }, 0);
+    },
     setPreview (data) {
       this.previewData = data;
       this.$emit('previewData', data);

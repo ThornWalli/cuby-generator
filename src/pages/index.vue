@@ -51,12 +51,24 @@ export default {
     AtomBaseButton
   },
   data () {
+    let color;
+    if (this.$route.query.color) {
+      if (!Array.isArray(this.$route.query.color)) {
+        color = [this.$route.query.color];
+      }
+    } else {
+      color = [COLORS[0]];
+    }
     return {
       renderType: null,
       COLORS,
       model: {
-        color: [].concat(this.$route.query.color) || null
+        color,
+        eyeLeft: 2,
+        eyeRight: 2,
+        mouth: 2
       },
+
       rendering: null,
       leftEyes: [],
       rightEyes: [],
@@ -114,9 +126,11 @@ export default {
   watch: {
     model: {
       handler (model) {
-        this.$router.replace({
-          query: Object.assign({}, this.$route.query, model)
-        });
+        global.setTimeout(() => {
+          this.$router.replace({
+            query: Object.assign({}, this.$route.query, model)
+          });
+        }, 0);
         this.$nextTick(() => {
           this.$refs.generator.render();
         });
