@@ -30,6 +30,7 @@ export default {
     htmlAttrs: {
       lang: 'en'
     },
+
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -42,38 +43,6 @@ export default {
         hid: 'description',
         name: 'description',
         content: pkg.description
-      },
-      {
-        property: 'og:type',
-        content: 'website'
-      },
-      {
-        property: 'og:sitename',
-        content: 'Cuby Generator'
-      },
-      {
-        property: 'og:title',
-        content: 'Cuby Generator'
-      },
-      {
-        property: 'og:description',
-        content: pkg.description
-      },
-      {
-        property: 'og:image',
-        content: `${getWebsiteHost()}/sharing.png`
-      },
-      {
-        property: 'og:image:width',
-        content: 2400
-      },
-      {
-        property: 'og:image:height',
-        content: 1260
-      },
-      {
-        property: 'og:url',
-        content: getWebsiteHost()
       }
     ]
   },
@@ -98,8 +67,16 @@ export default {
     meta: {
       name: pkg.name,
       description: pkg.description,
-      theme_color: '#0066ff'
+      theme_color: '#0066ff',
+
+      ogSiteName: 'Cuby Generator',
+      ogTitle: 'Cuby Generator',
+      ogDescription: pkg.description,
+      ogHost: getWebsiteHost(),
+      ogImage: '/sharing.png',
+      ogUrl: getWebsiteHost()
     }
+
   },
 
   speedkit: {
