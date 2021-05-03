@@ -64,6 +64,7 @@ export default {
     height: calc(48 / 16 * 1rem);
     margin: calc(4 / 16 * 1rem);
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     & > div {
       display: flex;
@@ -76,7 +77,18 @@ export default {
       transition: opacity 0.3s;
     }
 
-    &:hover > div,
+    @media (hover: none) {
+      &:active > div {
+        opacity: 1;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover > div {
+        opacity: 1;
+      }
+    }
+
     & > input:checked + div {
       opacity: 1;
     }

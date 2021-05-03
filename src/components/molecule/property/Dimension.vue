@@ -105,13 +105,13 @@ export default {
     onInputWidth (e) {
       this.width = e;
       if (this.ratio) {
-        this.height = this.ratio * e;
+        this.height = Math.round(this.ratio * e);
       }
     },
     onInputHeight (e) {
       this.height = e;
       if (this.ratio) {
-        this.width = this.ratio * e;
+        this.width = Math.round(this.ratio * e);
       }
     },
     onClickRevertDimension () {

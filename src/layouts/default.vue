@@ -50,8 +50,7 @@ html {
     'Helvetica Neue',
     Arial,
     sans-serif;
-  font-size: 16px;
-  font-size: calc(14 / 414 * 100vw);
+  font-size: calc(12 / 414 * 100vw);
   background: url('@/assets/grid.png');
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -63,7 +62,7 @@ html {
     font-size: 14px;
   }
 
-  @media (min-width: 767px) {
+  @media (min-width: 768px) {
     font-size: 16px;
   }
 }

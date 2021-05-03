@@ -83,7 +83,11 @@ export default {
 
     & svg {
       display: block;
-      width: calc(64 / 16 * 1rem);
+      width: calc(48 / 16 * 1rem);
+
+      @media (min-width: 992px) {
+        width: calc(64 / 16 * 1rem);
+      }
     }
   }
 

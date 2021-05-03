@@ -239,14 +239,6 @@ function getScreenDimension () {
     display: flex;
     flex-direction: column;
 
-    &.face-generator__properties {
-      & > * {
-        & >>> > button svg {
-          width: calc(48 / 16 * 1rem);
-        }
-      }
-    }
-
     &.face-generator__controls--left-bottom {
       right: calc(20 / 16 * 1rem);
       bottom: calc(20 / 16 * 1rem);

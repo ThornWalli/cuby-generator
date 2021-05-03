@@ -43,12 +43,21 @@ export default {
     width: calc(28 / 16 * 1rem);
   }
 
-  &:hover {
-    background-color: #f00;
+  @media (hover: none) {
+    &:active {
+      background: #f00;
+      transform: scale(0.9);
+    }
   }
 
-  &:active {
-    transform: scale(0.9);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: #f00;
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
   }
 }
 </style>
