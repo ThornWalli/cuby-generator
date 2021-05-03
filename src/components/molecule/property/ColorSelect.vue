@@ -37,7 +37,8 @@ export default {
   data () {
     return {
       COLORS,
-      model: {}
+      model: {},
+      inputTimeout: null
     };
   },
   computed: {
@@ -47,9 +48,12 @@ export default {
   },
   methods: {
     input (index, value) {
-      const values = [].concat(this.value);
-      values[Number(index)] = value;
-      this.$emit('input', values);
+      global.clearTimeout(this.inputTimeout);
+      this.inputTimeout = global.setTimeout(() => {
+        const values = [].concat(this.value);
+        values[Number(index)] = value;
+        this.$emit('input', values);
+      }, 200);
     }
   }
 };

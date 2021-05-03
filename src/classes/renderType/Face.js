@@ -22,7 +22,6 @@ export default class Face extends RenderType {
       const context = this.context;
 
       const size = Math.round((height > width ? width : height) * scale());
-
       color = color();
       const face = createFace({
         eyeLeft: eyeLeft(),
@@ -30,7 +29,7 @@ export default class Face extends RenderType {
         mouth: mouth(),
         mode,
         size,
-        invert: mode === MODE.ALPHA && getBrightnessByColor(color) / 255 < 0.5
+        invert: mode === MODE.ALPHA && ((getBrightnessByColor(color) / 255) < 0.3)
       });
 
       context.fillStyle = color;

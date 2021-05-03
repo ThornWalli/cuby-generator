@@ -69,7 +69,7 @@ export default class TileWall extends RenderType {
             mouth: mouth(),
             mode,
             size,
-            invert: mode === MODE.ALPHA && getBrightnessByColor(color) / 255 < 0.5
+            invert: mode === MODE.ALPHA && ((getBrightnessByColor(color) / 255) < 0.3)
           });
 
           context.fillStyle = color;

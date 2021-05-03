@@ -71,7 +71,7 @@ export default {
     background: none;
     background: rgba(255, 255, 255, 0.8);
     border: none;
-    border: solid white calc(5 / 16 * 1rem);
+    border: solid white calc(5 / 16 * 1rem + (5px - (5 / 16 * 1rem)));
     border-radius: calc(8 / 16 * 1rem);
     outline: none;
     box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
