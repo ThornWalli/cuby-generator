@@ -63,6 +63,10 @@ html {
   }
 
   @media (min-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media (min-width: 1400px) {
     font-size: 16px;
   }
 }

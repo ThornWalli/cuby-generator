@@ -85,7 +85,7 @@ export default {
       display: block;
       width: calc(48 / 16 * 1rem);
 
-      @media (min-width: 992px) {
+      @media (min-width: 768px) {
         width: calc(64 / 16 * 1rem);
       }
     }

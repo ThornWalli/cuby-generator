@@ -23,11 +23,11 @@
         :max="max"
         @input="onInputHeight"
       />
-      <atom-icon-button v-if="showRatioLock" aria-label="Lock ratio" title="Lock ratio" @click="ratio ? (ratio = null) : (ratio = height / width)">
+      <atom-icon-button v-if="showRatioLocked" aria-label="Lock ratio" title="Lock ratio" @click="onClickRatioLocked">
         <svg-icon-lock-open v-if="ratio === null" />
         <svg-icon-lock-closed v-else />
       </atom-icon-button>
-      <atom-icon-button v-if="showScreenApply && screen" aria-label="Apply screen dimension" title="Apply screen dimension" @click="width = screen.width; height = screen.height;">
+      <atom-icon-button v-if="showApplyScreen && screen" aria-label="Apply screen dimension" title="Apply screen dimension" @click="onClickApplyScreen">
         <svg-icon-desktop-computer />
       </atom-icon-button>
     </div>
@@ -49,11 +49,11 @@ export default {
       type: Boolean,
       default: true
     },
-    showRatioLock: {
+    showRatioLocked: {
       type: Boolean,
       default: false
     },
-    showScreenApply: {
+    showApplyScreen: {
       type: Boolean,
       default: false
     },
@@ -105,14 +105,25 @@ export default {
     onInputWidth (e) {
       this.width = e;
       if (this.ratio) {
-        this.height = Math.round(this.ratio * e);
+        this.height = Math.round(this.ratio[0] * e);
       }
     },
     onInputHeight (e) {
       this.height = e;
       if (this.ratio) {
-        this.width = Math.round(this.ratio * e);
+        this.width = Math.round(this.ratio[1] * e);
       }
+    },
+    onClickRatioLocked () {
+      if (this.ratio) {
+        this.ratio = null;
+      } else {
+        this.ratio = [this.height / this.width, this.width / this.height];
+      }
+    },
+    onClickApplyScreen () {
+      this.width = screen.width;
+      this.height = screen.height;
     },
     onClickRevertDimension () {
       this.width = this.value[1];

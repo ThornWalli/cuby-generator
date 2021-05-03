@@ -1,12 +1,14 @@
 <template>
   <div class="face-generator" :class="{'js--wait': renderTimeout}">
     <atom-preview v-if="hasPreview" class="face-generator__preview" v-bind="previewData" />
+
     <div class="face-generator__controls face-generator__controls--left-bottom face-generator__properties">
       <span class="separator" />
       <slot name="controlsBefore" />
-      <molecule-property v-model="dimension" v-bind="propertyDimension" :value="dimension" />
+      <molecule-property v-model="model.dimension" v-bind="propertyDimension" :value="model.dimension" />
       <molecule-property v-model="renderType" v-bind="propertyRenderType" :value="renderType" />
-      <molecule-property v-model="mode" v-bind="propertyMode" :value="mode" />
+      <molecule-property v-model="model.mode" v-bind="propertyMode" :value="model.mode" />
+      <molecule-property v-model="model.scale" v-bind="propertyScale" :value="model.scale" />
       <slot name="controlsAfter" />
     </div>
     <div class="face-generator__controls face-generator__controls--left-top">
@@ -37,6 +39,7 @@ import SvgControlsDimension from '@/assets/svg/controls/controls_dimension.svg?v
 import SvgControlsMode from '@/assets/svg/controls/controls_mode.svg?vue-template';
 import SvgControlsModeColor from '@/assets/svg/controls/controls_mode_color.svg?vue-template';
 import SvgControlsModeAlpha from '@/assets/svg/controls/controls_mode_alpha.svg?vue-template';
+import SvgControlsScale from '@/assets/svg/controls/controls_scale.svg?vue-template';
 
 import SvgControlsType from '@/assets/svg/controls/controls_type.svg?vue-template';
 
@@ -67,16 +70,23 @@ export default {
   data () {
     const renderTypes = [new Face(), new TileWall()];
 
+    let dimension = getScreenDimension();
+    if ('dimension' in this.$route.query) {
+      dimension = this.$route.query.dimension.map(value => Number(value));
+    }
+
     return {
       screen,
+      model: {
+        mode: this.$route.query.mode || MODE.COLOR,
+        scale: 1,
+        dimension
+      },
       currentRenderType: null,
       renderTimeout: null,
-      model: {},
       renderFn: null,
-      mode: MODE.COLOR,
-      dimension: getScreenDimension(),
-      renderTypes,
       renderType: this.$route.query.renderType || renderTypes[0].name,
+      renderTypes,
       previewData: {
         // eslint-disable-next-line no-secrets/no-secrets
         src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
@@ -89,7 +99,7 @@ export default {
     propertyDimension () {
       return getProperty('dimension', 'dimension', 'Dimension', {
         icon: SvgControlsDimension,
-        options: { showRatioLock: true, showScreenApply: true }
+        options: { showRatioLocked: true, showApplyScreen: true }
       });
     },
 
@@ -113,6 +123,19 @@ export default {
       };
     },
 
+    propertyScale () {
+      return getProperty('number', 'scale', 'Scale', {
+        icon: SvgControlsScale,
+        availableViews: ['seed'],
+        default: 1,
+        options: {
+          step: 0.1,
+          min: 0,
+          max: 10
+        }
+      });
+    },
+
     propertyRenderType () {
       return {
         icon: SvgControlsType,
@@ -129,9 +152,6 @@ export default {
       };
     },
 
-    size () {
-      return ipoint(this.dimension[0], this.dimension[1]);
-    },
     modeOptions () {
       return Object.entries(MODE).map(([label, value]) => {
         return {
@@ -150,22 +170,23 @@ export default {
     }
   },
   watch: {
-    mode () {
-      this.render();
-    },
-    size () {
-      this.render();
+    model: {
+      handler (model) {
+        this.render();
+        this.$router.replace({
+          query: Object.assign({}, this.$route.query, model)
+        });
+      },
+      deep: true
     },
     renderType: {
       async handler (name, lastValue) {
         await assetManager.ready;
-        if (lastValue) {
-          this.$router.replace({
-            query: Object.assign({}, this.$route.query, {
-              renderType: this.renderType
-            })
-          });
-        }
+        this.$router.replace({
+          query: Object.assign({}, this.$route.query, {
+            renderType: name
+          })
+        });
 
         this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
         this.render();
@@ -189,9 +210,10 @@ export default {
       if (this.currentRenderType) {
         global.clearTimeout(this.renderTimeout);
         this.renderTimeout = global.setTimeout(() => {
-          const [width, height] = this.dimension;
+          const [width, height] = this.model.dimension;
+          const { scale, mode } = this.model;
           this.setPreview({
-            src: this.currentRenderType.draw({ width, height, mode: this.mode }, this.config()).toDataURL(),
+            src: this.currentRenderType.draw({ width, height, scale: () => scale, mode }, this.config()).toDataURL(),
             size: ipoint(width, height)
           });
           this.renderTimeout = null;

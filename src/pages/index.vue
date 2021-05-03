@@ -55,10 +55,7 @@ export default {
       renderType: null,
       COLORS,
       model: {
-        color: null,
-        eyeLeft: 2,
-        eyeRight: 2,
-        mouth: 2
+        color: [].concat(this.$route.query.color) || null
       },
       rendering: null,
       leftEyes: [],
@@ -116,8 +113,13 @@ export default {
   },
   watch: {
     model: {
-      handler () {
-        this.$refs.generator.render();
+      handler (model) {
+        this.$router.replace({
+          query: Object.assign({}, this.$route.query, model)
+        });
+        this.$nextTick(() => {
+          this.$refs.generator.render();
+        });
       },
       deep: true
     }
@@ -147,9 +149,9 @@ export default {
         result[prop.name] = this.model[prop.name] || prop.default;
         return result;
       }, {
-        eyeLeft: 2,
-        eyeRight: 2,
-        mouth: 2
+        eyeLeft: this.$route.query.eyeLeft || 2,
+        eyeRight: this.$route.query.eyeRight || 2,
+        mouth: this.$route.query.mouth || 2
       });
     }
   }

@@ -42,8 +42,8 @@ export default class TileWall extends RenderType {
       })
     ]
 
-    draw ({ width, height, mode }, {
-      scale, color,
+    draw ({ width, height, mode, scale }, {
+      color,
       eyeLeft, eyeRight, mouth,
       relativeOffset
     }) {
