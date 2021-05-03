@@ -9,9 +9,9 @@
         :min="min"
         :step="step"
         :max="max"
-        @input="width = $event"
+        @input="onInputWidth"
       />
-      <atom-icon-button @click="onClickRevertDimension">
+      <atom-icon-button aria-label="Switch values" title="Switch values" @click="onClickRevertDimension">
         <svg-icon-switch-horizontal />
       </atom-icon-button>
       <atom-base-input
@@ -21,9 +21,13 @@
         :min="min"
         :step="step"
         :max="max"
-        @input="height = $event"
+        @input="onInputHeight"
       />
-      <atom-icon-button v-if="screenApply && screen" @click="width = screen.width; height = screen.height">
+      <atom-icon-button v-if="showRatioLock" aria-label="Lock ratio" title="Lock ratio" @click="ratio ? (ratio = null) : (ratio = height / width)">
+        <svg-icon-lock-open v-if="ratio === null" />
+        <svg-icon-lock-closed v-else />
+      </atom-icon-button>
+      <atom-icon-button v-if="showScreenApply && screen" aria-label="Apply screen dimension" title="Apply screen dimension" @click="width = screen.width; height = screen.height;">
         <svg-icon-desktop-computer />
       </atom-icon-button>
     </div>
@@ -34,16 +38,22 @@
 import AtomIconButton from '@/components/atoms/IconButton';
 import AtomBaseInput from '@/components/atoms/BaseInput';
 import SvgIconDesktopComputer from '@/assets/svg/heroicons/desktop-computer.svg?vue-template';
+import SvgIconLockOpen from '@/assets/svg/heroicons/lock-open.svg?vue-template';
+import SvgIconLockClosed from '@/assets/svg/heroicons/lock-closed.svg?vue-template';
 import SvgIconSwitchHorizontal from '@/assets/svg/heroicons/switch-horizontal.svg?vue-template';
 
 export default {
-  components: { AtomIconButton, AtomBaseInput, SvgIconDesktopComputer, SvgIconSwitchHorizontal },
+  components: { AtomIconButton, AtomBaseInput, SvgIconDesktopComputer, SvgIconSwitchHorizontal, SvgIconLockOpen, SvgIconLockClosed },
   props: {
     active: {
       type: Boolean,
       default: true
     },
-    screenApply: {
+    showRatioLock: {
+      type: Boolean,
+      default: false
+    },
+    showScreenApply: {
       type: Boolean,
       default: false
     },
@@ -68,6 +78,7 @@ export default {
   },
   data () {
     return {
+      ratio: null,
       width: this.value[0],
       height: this.value[1],
       screen: global.screen,
@@ -91,6 +102,18 @@ export default {
     }
   },
   methods: {
+    onInputWidth (e) {
+      this.width = e;
+      if (this.ratio) {
+        this.height = this.ratio * e;
+      }
+    },
+    onInputHeight (e) {
+      this.height = e;
+      if (this.ratio) {
+        this.width = this.ratio * e;
+      }
+    },
     onClickRevertDimension () {
       this.width = this.value[1];
       this.height = this.value[0];

@@ -89,7 +89,7 @@ export default {
     propertyDimension () {
       return getProperty('dimension', 'dimension', 'Dimension', {
         icon: SvgControlsDimension,
-        options: { screenApply: true }
+        options: { showRatioLock: true, showScreenApply: true }
       });
     },
 
