@@ -59,11 +59,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 
-  @media (--min-width: 576px) {
+  @media (min-width: 576px) {
     font-size: 14px;
   }
 
-  @media (--min-width: 767px) {
+  @media (min-width: 767px) {
     font-size: 16px;
   }
 }
