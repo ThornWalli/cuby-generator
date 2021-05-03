@@ -70,22 +70,27 @@ export default {
   data () {
     const renderTypes = [new Face(), new TileWall()];
 
-    let dimension = getScreenDimension();
-    if ('dimension' in this.$route.query) {
+    let dimension = this.$route.query.dimension;
+    if (dimension && Array.isArray(dimension) && dimension.length === 2) {
       dimension = this.$route.query.dimension.map(value => Number(value));
+    } else {
+      dimension = getScreenDimension();
     }
+
+    const mode = (Object.values(MODE).includes(this.$route.query.mode) && this.$route.query.mode) || MODE.COLOR;
+    const renderType = (renderTypes.find(({ name }) => name === this.$route.query.renderType) && this.$route.query.renderType) || renderTypes[0].name;
 
     return {
       screen,
       model: {
-        mode: this.$route.query.mode || MODE.COLOR,
-        scale: 1,
+        mode,
+        scale: parseFloat(this.$route.query.scale) || 1,
         dimension
       },
       currentRenderType: null,
       renderTimeout: null,
       renderFn: null,
-      renderType: this.$route.query.renderType || renderTypes[0].name,
+      renderType,
       renderTypes,
       previewData: {
         // eslint-disable-next-line no-secrets/no-secrets

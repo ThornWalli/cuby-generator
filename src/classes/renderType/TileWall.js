@@ -5,7 +5,6 @@ import { createFace } from '@@/src/utils/face';
 import SvgControlsTypeTileWall from '@/assets/svg/controls/controls_type_tile_wall.svg?vue-template';
 import SvgControlsColor from '@/assets/svg/controls/controls_color.svg?vue-template';
 import SvgControlsOffset from '@/assets/svg/controls/controls_offset.svg?vue-template';
-import SvgControlsScale from '@/assets/svg/controls/controls_scale.svg?vue-template';
 import { MODE } from '../AssetManager';
 import { getProperty } from './properties';
 
@@ -28,16 +27,6 @@ export default class TileWall extends RenderType {
           step: 0.25,
           min: 0,
           max: 1
-        }
-      }),
-      getProperty('number', 'scale', 'Scale', {
-        icon: SvgControlsScale,
-        availableViews: ['seed'],
-        default: 1,
-        options: {
-          step: 0.1,
-          min: 0,
-          max: 10
         }
       })
     ]

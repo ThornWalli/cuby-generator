@@ -59,14 +59,18 @@ export default {
     } else {
       color = [COLORS[0]];
     }
+
+    const eyeLeft = (assetManager.getAssetsByType(TYPES.EYE_LEFT)[this.$route.query.eyeLeft] && this.$route.query.eyeLeft) || 2;
+    const eyeRight = (assetManager.getAssetsByType(TYPES.EYE_RIGHT)[this.$route.query.eyeRight] && this.$route.query.eyeRight) || 2;
+    const mouth = (assetManager.getAssetsByType(TYPES.MOUTH)[this.$route.query.mouth] && this.$route.query.mouth) || 2;
     return {
       renderType: null,
       COLORS,
       model: {
         color,
-        eyeLeft: 2,
-        eyeRight: 2,
-        mouth: 2
+        eyeLeft,
+        eyeRight,
+        mouth
       },
 
       rendering: null,
@@ -162,11 +166,7 @@ export default {
       this.model = renderType.props.reduce((result, prop) => {
         result[prop.name] = this.model[prop.name] || prop.default;
         return result;
-      }, {
-        eyeLeft: this.$route.query.eyeLeft || 2,
-        eyeRight: this.$route.query.eyeRight || 2,
-        mouth: this.$route.query.mouth || 2
-      });
+      }, this.model);
     }
   }
 };

@@ -124,6 +124,9 @@ export default {
     onClickApplyScreen () {
       this.width = screen.width;
       this.height = screen.height;
+      if (this.ratio) {
+        this.ratio = [this.height / this.width, this.width / this.height];
+      }
     },
     onClickRevertDimension () {
       this.width = this.value[1];
