@@ -32,9 +32,10 @@ export default {
   letter-spacing: 0;
   letter-spacing: calc(1.4 / 16 * 1rem);
   background: #06f;
-  border: solid #000 calc(5 / 16 * 1rem);
+  border: solid #fff calc(5 / 16 * 1rem);
   border-radius: calc(3 / 16 * 1rem);
-  transition: box-shadow 0.3s, transform 0.3s;
+  box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
@@ -42,6 +43,7 @@ export default {
   @media (hover: none) {
     &:active {
       background: #f00;
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
       transform: scale(0.9);
     }
   }
@@ -49,6 +51,7 @@ export default {
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background: #f00;
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
     }
 
     &:active {

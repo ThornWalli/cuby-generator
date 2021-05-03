@@ -74,9 +74,9 @@ export default {
     border: solid white calc(5 / 16 * 1rem);
     border-radius: calc(8 / 16 * 1rem);
     outline: none;
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
     opacity: 0.75;
-    transition: background-color 0.6s, opacity 0.6s;
+    transition: box-shadow 0.6s, background-color 0.6s, opacity 0.6s;
     backdrop-filter: blur(8px);
     appearance: none;
     -webkit-tap-highlight-color: transparent;
@@ -91,20 +91,28 @@ export default {
     }
   }
 
-  & button + div {
-    /* padding: calc(8 / 16 * 1rem) 0;
-    padding-right: calc(8 / 16 * 1rem); */
-
-    /* overflow: hidden; */
-  }
-
   & .property__options {
     margin-left: calc(15 / 16 * 1rem);
   }
 
-  & button:hover {
-    background-color: #06f;
-    opacity: 1;
+  @media (hover: none) {
+    &:active {
+      & button {
+        background-color: #06f;
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        opacity: 1;
+      }
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      & button {
+        background-color: #06f;
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        opacity: 1;
+      }
+    }
   }
 
   pointer-events: none;
@@ -114,6 +122,7 @@ export default {
 
     & button {
       background-color: #06f;
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
       opacity: 1;
     }
 
