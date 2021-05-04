@@ -4,6 +4,7 @@
       $getFont('Open Sans', 600, 'normal', {selector: 'span'}),
       $getFont('Open Sans', 700, 'normal', {selector: 'input'})
     ]"
+    :type="type"
     class="atom-base-input"
     :class="{'js--focus':focus}"
   >
@@ -11,6 +12,7 @@
     <input
       v-bind="$attrs"
       :value="value"
+      :type="type"
       @input="$emit('input', $event.target.value)"
       @focus="focus = true"
       @blur="focus = false"
@@ -28,6 +30,10 @@ export default {
     value: {
       type: [String, Number],
       default: null
+    },
+    type: {
+      type: String,
+      default: 'text'
     }
   },
   data () {
@@ -41,7 +47,6 @@ export default {
 <style lang="postcss" scoped>
 .atom-base-input {
   display: inline-flex;
-  width: calc(200 / 414 * 100vw);
   padding: 0;
   font-weight: bold;
   background: #fff;
@@ -50,14 +55,6 @@ export default {
   opacity: 0.9;
   transition: opacity 0.3s;
   backdrop-filter: blur(8px);
-
-  @media (min-width: 576px) {
-    width: 200px;
-  }
-
-  @media (min-width: 768px) {
-    width: auto;
-  }
 
   & span {
     margin-right: calc(5 / 16 * 1rem);
@@ -69,6 +66,18 @@ export default {
   & span {
     padding: calc(10 / 16 * 1rem);
     font-size: calc(20 / 16 * 1rem);
+  }
+
+  &[type="text"] {
+    width: calc(200 / 414 * 100vw);
+
+    @media (min-width: 576px) {
+      width: 200px;
+    }
+
+    @media (min-width: 768px) {
+      width: auto;
+    }
   }
 
   & input {
