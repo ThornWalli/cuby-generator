@@ -5,6 +5,7 @@ import { createFace } from '@@/src/utils/face';
 import SvgControlsTypeTileWall from '@/assets/svg/controls/controls_type_tile_wall.svg?vue-template';
 import SvgControlsColor from '@/assets/svg/controls/controls_color.svg?vue-template';
 import SvgControlsOffset from '@/assets/svg/controls/controls_offset.svg?vue-template';
+import { ipoint } from '@js-basics/vector';
 import { MODE } from '../AssetManager';
 import { getProperty } from './properties';
 
@@ -22,7 +23,7 @@ export default class TileWall extends RenderType {
       getProperty('dimension', 'relativeOffset', 'Offset', {
         availableViews: ['seed'],
         icon: SvgControlsOffset,
-        default: [0, 0],
+        default: ipoint(0, 0),
         options: {
           step: 0.25,
           min: 0,
@@ -42,7 +43,7 @@ export default class TileWall extends RenderType {
       colorA = colorA || (() => 'transparent');
       colorB = colorB || (() => 'transparent');
 
-      const [relativeOffsetX, relativeOffsetY] = relativeOffset;
+      const { x: relativeOffsetX, y: relativeOffsetY } = relativeOffset();
       const context = this.context;
 
       const size = Math.round(128 * scale());
@@ -56,10 +57,10 @@ export default class TileWall extends RenderType {
           let offsetY_ = offsetY;
           let offsetX_ = offsetX;
           if (x % 2 === 0) {
-            offsetY_ += size * relativeOffsetY();
+            offsetY_ += size * relativeOffsetY;
           }
           if (y % 2 === 0) {
-            offsetX_ += size * relativeOffsetX();
+            offsetX_ += size * relativeOffsetX;
           }
 
           const color = x % 2 + y % 2 === 1 ? colorA() : colorB();

@@ -67,31 +67,14 @@ export default {
   methods: {
 
     getModel () {
-      let color;
-      if (this.$route.query.color) {
-        if (!Array.isArray(this.$route.query.color)) {
-          color = [this.$route.query.color];
-        }
-      } else {
-        color = [COLORS[4]];
-      }
-      let relativeOffset = this.$route.query.relativeOffset;
-      if (relativeOffset && Array.isArray(relativeOffset) && relativeOffset.length === 2) {
-        relativeOffset = this.$route.query.relativeOffset.map(value => Number(value));
-      } else {
-        relativeOffset = [0, 0];
-      }
-
       const eyeLeft = (assetManager.getAssetsByType(TYPES.EYE_LEFT)[this.$route.query.eyeLeft] && this.$route.query.eyeLeft) || 2;
       const eyeRight = (assetManager.getAssetsByType(TYPES.EYE_RIGHT)[this.$route.query.eyeRight] && this.$route.query.eyeRight) || 2;
       const mouth = (assetManager.getAssetsByType(TYPES.MOUTH)[this.$route.query.mouth] && this.$route.query.mouth) || 2;
 
       return {
-        color,
         eyeLeft,
         eyeRight,
-        mouth,
-        relativeOffset
+        mouth
       };
     },
     async getFaceInputs () {

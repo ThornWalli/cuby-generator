@@ -29,6 +29,10 @@ export default {
     })()
   },
 
+  css: [
+    '@/css/vars.pcss'
+  ],
+
   generate: {
     crawler: false,
     dir: getDistPath()

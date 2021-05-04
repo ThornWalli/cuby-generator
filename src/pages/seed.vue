@@ -5,6 +5,7 @@
       :has-preview="false"
       :filename="`image_${seed}`"
       :override-config="config"
+      input-filter="seed"
       @previewData="$store.dispatch('layout/setPreviewData', $event)"
       @renderType="onRenderType"
     >

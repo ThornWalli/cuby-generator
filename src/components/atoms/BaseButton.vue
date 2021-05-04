@@ -27,13 +27,13 @@ export default {
   display: block;
   padding: calc(10 / 16 * 1rem) calc(20 / 16 * 1rem);
   font-size: calc(24 / 16 * 1rem);
-  color: #fff;
+  color: var(--color-white);
   text-align: center;
   text-decoration: none;
   letter-spacing: 0;
   letter-spacing: calc(1.4 / 16 * 1rem);
-  background: #06f;
-  border: solid #fff calc(5 / 16 * 1rem);
+  background: var(--color-base);
+  border: solid var(--color-white) calc(5 / 16 * 1rem);
   border-radius: calc(3 / 16 * 1rem);
   box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
   transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
@@ -43,7 +43,7 @@ export default {
 
   @media (hover: none) {
     &:active {
-      background: #f00;
+      background: var(--color-red);
       box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
       transform: scale(0.9);
     }
@@ -51,7 +51,7 @@ export default {
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      background: #f00;
+      background: var(--color-red);
       box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
     }
 

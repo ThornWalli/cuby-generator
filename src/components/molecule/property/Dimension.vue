@@ -4,7 +4,7 @@
     <div v-if="active" class="molecule-property-dimension">
       <atom-base-input
         class="property-dimension__input"
-        :value="value[0]"
+        :value="value.x"
         type="number"
         :min="min"
         :step="step"
@@ -16,7 +16,7 @@
       </atom-icon-button>
       <atom-base-input
         class="property-dimension__input"
-        :value="value[1]"
+        :value="value.y"
         type="number"
         :min="min"
         :step="step"
@@ -41,6 +41,7 @@ import SvgIconDesktopComputer from '@/assets/svg/heroicons/desktop-computer.svg?
 import SvgIconLockOpen from '@/assets/svg/heroicons/lock-open.svg?vue-template';
 import SvgIconLockClosed from '@/assets/svg/heroicons/lock-closed.svg?vue-template';
 import SvgIconSwitchHorizontal from '@/assets/svg/heroicons/switch-horizontal.svg?vue-template';
+import { ipoint } from '@js-basics/vector';
 
 export default {
   components: { AtomIconButton, AtomBaseInput, SvgIconDesktopComputer, SvgIconSwitchHorizontal, SvgIconLockOpen, SvgIconLockClosed },
@@ -58,9 +59,9 @@ export default {
       default: false
     },
     value: {
-      type: Array,
+      type: Object,
       default () {
-        return [0, 0];
+        return ipoint(0, 0);
       }
     },
     min: {
@@ -79,15 +80,15 @@ export default {
   data () {
     return {
       ratio: null,
-      width: this.value[0],
-      height: this.value[1],
+      width: Number(this.value.x),
+      height: Number(this.value.y),
       screen: global.screen,
       timeout: null
     };
   },
   computed: {
     dimension () {
-      return [this.width, this.height];
+      return ipoint(this.width, this.height);
     }
   },
   watch: {
@@ -129,8 +130,8 @@ export default {
       }
     },
     onClickRevertDimension () {
-      this.width = this.value[1];
-      this.height = this.value[0];
+      this.width = this.value.y;
+      this.height = this.value.x;
     }
   }
 };

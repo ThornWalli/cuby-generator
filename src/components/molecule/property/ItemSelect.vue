@@ -70,7 +70,7 @@ export default {
       display: flex;
       align-items: center;
       padding: calc(5 / 16 * 1rem);
-      background: white;
+      background: var(--color-white);
       border-radius: calc(8 / 16 * 1rem);
       box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
       opacity: 0.75;

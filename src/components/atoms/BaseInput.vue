@@ -50,7 +50,7 @@ export default {
   padding: 0;
   overflow: hidden;
   font-weight: bold;
-  background: #fff;
+  background: var(--color-white);
   border-radius: calc(3 / 16 * 1rem);
   box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
   opacity: 0.75;
@@ -94,8 +94,8 @@ export default {
     opacity: 1;
 
     & span {
-      color: #fff;
-      background: #06f;
+      color: var(--color-white);
+      background: var(--color-base);
     }
   }
 }

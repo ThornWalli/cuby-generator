@@ -1,3 +1,4 @@
+
 <template>
   <div class="face-generator" :class="{'js--wait': renderTimeout}">
     <atom-preview v-if="hasPreview" class="face-generator__preview" v-bind="previewData" />
@@ -8,12 +9,12 @@
       <molecule-property
         v-for="input in preparedInputs"
         :key="input.name"
-        v-model="model[input.name]"
         :icon="input.icon"
         :component="input.component"
         :options="input.options"
         :label="input.label"
         :value="model[input.name]"
+        @input="onInput(input,$event)"
       />
 
       <slot name="controlsAfter" />
@@ -34,9 +35,11 @@
     </div>
   </div>
 </template>
-<script>
+<script>/* eslint-disable no-unused-vars */
+
+/* eslint-disable vue/no-unused-components */
 import assetManager from '@/services/assetManager';
-import { ipoint } from '@js-basics/vector';
+import { IPoint, ipoint } from '@js-basics/vector';
 
 import AtomPreview from '@/components/atoms/Preview';
 import AtomBaseButton from '@/components/atoms/BaseButton';
@@ -74,6 +77,10 @@ export default {
       type: String,
       default: 'image'
     },
+    inputFilter: {
+      type: String,
+      default: null
+    },
     inputs: {
       type: Array,
       default () {
@@ -87,6 +94,7 @@ export default {
       }
     }
   },
+
   data () {
     const renderTypes = [new Face(), new TileWall()];
     return {
@@ -101,21 +109,12 @@ export default {
         // eslint-disable-next-line no-secrets/no-secrets
         src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
         size: ipoint(0, 0)
-      }
+      },
+      preparedInputs: []
     };
   },
-  computed: {
 
-    preparedInputs () {
-      const inputs = [
-        ...this.getInputs(),
-        ...this.inputs,
-        ...(this.currentRenderType && this.currentRenderType.props) || []
-      ];
-      return inputs.map((input) => {
-        return Object.assign({}, input);
-      });
-    },
+  computed: {
 
     modeOptions () {
       return Object.entries(MODE).map(([label, value]) => {
@@ -134,37 +133,38 @@ export default {
       });
     }
   },
+
   watch: {
-    model: {
-      handler (model) {
-        this.render();
-        this.updateRoute();
-      },
-      deep: true
+    inputs () {
+      this.applyInputs();
     },
     'model.renderType': {
       async handler (name) {
         if (this.renderTypes) {
           await assetManager.ready;
-          // this.updateRoute();
           this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
+          this.applyInputs();
+          console.log('asasd');
           this.render();
           this.$emit('renderType', this.currentRenderType);
-
-          this.model = this.currentRenderType.props.reduce((result, prop) => {
-            result[prop.name] = this.model[prop.name] || prop.default;
-            return result;
-          }, this.model);
+          // this.updateRoute();
         }
       },
       immediate: true
     }
   },
+
   async mounted () {
     await assetManager.setup();
   },
-  methods: {
 
+  methods: {
+    onInput (input, e) {
+      this.model[input.name] = e;
+      this.render();
+      this.updateRoute();
+      this.$emit('modelChange', this.model);
+    },
     getInputs () {
       const modeIcons = {
         [MODE.COLOR]: SvgControlsModeColor,
@@ -173,10 +173,12 @@ export default {
       return [
         getProperty('dimension', 'dimension', 'Dimension', {
           icon: SvgControlsDimension,
+          availableViews: ['seed'],
           options: { showRatioLocked: true, showApplyScreen: true }
         }),
         getProperty('items', 'mode', 'Mode', {
           icon: SvgControlsMode,
+          availableViews: ['seed'],
           options: {
             items: Object.entries(MODE).map(([label, value]) => {
               return {
@@ -200,6 +202,7 @@ export default {
         }),
         getProperty('items', 'renderType', 'RenderType', {
           icon: SvgControlsType,
+          availableViews: ['seed'],
           options: {
             items: this.renderTypes.map((type) => {
               return {
@@ -214,23 +217,40 @@ export default {
       ];
     },
 
+    applyInputs () {
+      this.preparedInputs = [
+        ...this.getInputs(),
+        ...this.inputs.filter(input => !this.inputFilter || (this.inputFilter && input.availableViews.includes(this.inputFilter))),
+        ...this.currentRenderType.props
+      ]
+        .filter(input => !this.inputFilter || (this.inputFilter && (input.availableViews || []).includes(this.inputFilter)))
+        .map((input) => {
+          if (input.type === 'dimension') {
+            if (this.$route.query[input.name] && !this.model[input.name]) {
+              this.model[input.name] = ipoint(...this.$route.query[input.name]);
+            } else if (input.name === 'dimension' && !this.model[input.name]) {
+              this.model[input.name] = getScreenDimension();
+            } else {
+              this.model[input.name] = this.model[input.name] || ipoint(...input.default);
+            }
+          } else if (input.type === 'color') {
+            this.model[input.name] = [].concat(this.$route.query[input.name] || this.model[input.name] || input.default);
+          } else {
+            this.model[input.name] = this.model[input.name] || this.$route.query[input.name] || input.default;
+          }
+          return Object.assign({}, input);
+        });
+    },
+
     getModel (renderTypes) {
       const renderType = (renderTypes.find(({ name }) => name === this.$route.query.renderType) && this.$route.query.renderType) || renderTypes[0].name;
-
-      let dimension = this.$route.query.dimension;
-      if (dimension && Array.isArray(dimension) && dimension.length === 2) {
-        dimension = this.$route.query.dimension.map(value => Number(value));
-      } else {
-        dimension = getScreenDimension();
-      }
 
       const mode = (Object.values(MODE).includes(this.$route.query.mode) && this.$route.query.mode) || MODE.COLOR;
 
       return {
         renderType,
         mode,
-        scale: parseFloat(this.$route.query.scale) || 1,
-        dimension
+        scale: parseFloat(this.$route.query.scale) || 1
       };
     },
     async onClickShare () {
@@ -256,7 +276,12 @@ export default {
     updateRoute () {
       global.setTimeout(() => {
         this.$router.replace({
-          query: Object.assign({}, this.$route.query, this.model)
+          query: Object.assign({}, this.$route.query, Object.fromEntries(Object.entries(this.model).map(([key, value]) => {
+            if (value instanceof IPoint) {
+              value = [value.x, value.y];
+            }
+            return [key, value];
+          })))
         });
       }, 0);
     },
@@ -271,7 +296,7 @@ export default {
       if (this.currentRenderType) {
         global.clearTimeout(this.renderTimeout);
         this.renderTimeout = global.setTimeout(() => {
-          const [width, height] = this.model.dimension;
+          const { x: width, y: height } = this.model.dimension;
           const { scale, mode } = this.model;
           const model = Object.assign(Object.keys(this.model).reduce((result, key) => {
             if (typeof this.model[String(key)] === 'function') {
@@ -289,13 +314,12 @@ export default {
             }
             return result;
           }, {}), this.overrideConfig());
-
           this.setPreview({
             src: this.currentRenderType.draw({ width, height, scale: () => scale, mode }, model).toDataURL(),
             size: ipoint(width, height)
           });
           this.renderTimeout = null;
-        }, 500);
+        }, 300);
       }
     }
 
@@ -304,9 +328,9 @@ export default {
 
 function getScreenDimension () {
   const screen = global.screen;
-  let dimension = [window.innerWidth, window.innerHeight];
+  let dimension = ipoint(window.innerWidth, window.innerHeight);
   if (screen) {
-    dimension = [screen.width, screen.height];
+    dimension = ipoint(screen.width, screen.height);
   }
   return dimension;
 }

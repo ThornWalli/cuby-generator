@@ -28,9 +28,9 @@ export default {
   height: calc(32 / 16 * 1rem);
   padding: calc(4 / 16 * 1rem);
   font-weight: bold;
-  color: white;
+  color: var(--color-white);
   cursor: pointer;
-  background: #06f;
+  background: var(--color-base);
   border: none;
   border-radius: 50%;
   box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
@@ -45,14 +45,14 @@ export default {
 
   @media (hover: none) {
     &:active {
-      background: #f00;
+      background: var(--color-red);
       transform: scale(0.9);
     }
   }
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      background: #f00;
+      background: var(--color-red);
     }
 
     &:active {

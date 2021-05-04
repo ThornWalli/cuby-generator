@@ -83,7 +83,7 @@ export default {
     overflow: hidden;
     font-size: calc(20 / 16 * 1rem);
     font-weight: bold;
-    background: white;
+    background: var(--color-white);
     border: none;
     border-radius: calc(8 / 16 * 1rem);
     outline: none;

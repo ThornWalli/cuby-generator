@@ -90,8 +90,8 @@ export default {
     font-size: calc(20 / 16 * 1rem);
     font-weight: bold;
     text-align: center;
-    background: white;
-    border: solid #fff calc(5 / 16 * 1rem);
+    background: var(--color-white);
+    border: solid var(--color-white) calc(5 / 16 * 1rem);
     border-radius: calc(3 / 16 * 1rem);
     outline: none;
     box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);

@@ -27,7 +27,7 @@ export default {
       }
     },
     value: {
-      type: [String, Number, Array],
+      type: [String, Number, Array, Object],
       default: null
     },
     component: {
@@ -71,7 +71,7 @@ export default {
     background: none;
     background: rgba(255, 255, 255, 0.8);
     border: none;
-    border: solid white calc(5 / 16 * 1rem + (5px - (5 / 16 * 1rem)));
+    border: solid var(--color-white) calc(5 / 16 * 1rem + (5px - (5 / 16 * 1rem)));
     border-radius: calc(8 / 16 * 1rem);
     outline: none;
     box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
@@ -98,7 +98,7 @@ export default {
   @media (hover: none) {
     &:active {
       & button {
-        background-color: #06f;
+        background-color: var(--color-base);
         box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
         opacity: 1;
       }
@@ -108,7 +108,7 @@ export default {
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       & button {
-        background-color: #06f;
+        background-color: var(--color-base);
         box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
         opacity: 1;
       }
@@ -121,7 +121,7 @@ export default {
     pointer-events: auto;
 
     & button {
-      background-color: #06f;
+      background-color: var(--color-base);
       box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
       opacity: 1;
     }
