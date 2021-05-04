@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.16](https://github.com/ThornWalli/cuby-generator/compare/v1.0.15...v1.0.16) (2021-05-04)
+
+
+### Bug Fixes
+
+* **seed:** fix override config ([e015838](https://github.com/ThornWalli/cuby-generator/commit/e015838ab85dd582d8215879b02f59220c223ce5))
+
 ## [1.0.15](https://github.com/ThornWalli/cuby-generator/compare/v1.0.14...v1.0.15) (2021-05-04)
 
 
