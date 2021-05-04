@@ -256,9 +256,7 @@ export default {
     updateRoute () {
       global.setTimeout(() => {
         this.$router.replace({
-          query: Object.assign({}, this.$route.query, this.model, {
-            renderType: this.renderType
-          })
+          query: Object.assign({}, this.$route.query, this.model)
         });
       }, 0);
     },

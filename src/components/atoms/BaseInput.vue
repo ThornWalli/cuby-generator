@@ -48,18 +48,19 @@ export default {
 .atom-base-input {
   display: inline-flex;
   padding: 0;
+  overflow: hidden;
   font-weight: bold;
   background: #fff;
   border-radius: calc(3 / 16 * 1rem);
   box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
-  opacity: 0.9;
+  opacity: 0.75;
   transition: opacity 0.3s;
   backdrop-filter: blur(8px);
 
   & span {
     margin-right: calc(5 / 16 * 1rem);
     background: rgba(0, 0, 0, 0.1);
-    opacity: 0.8;
+    transition: color 0.3s, background 0.3s;
   }
 
   & input,
@@ -91,6 +92,11 @@ export default {
   &.js--focus,
   &:focus {
     opacity: 1;
+
+    & span {
+      color: #fff;
+      background: #06f;
+    }
   }
 }
 </style>
