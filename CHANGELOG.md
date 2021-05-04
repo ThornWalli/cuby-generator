@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.14](https://github.com/ThornWalli/cuby-generator/compare/v1.0.13...v1.0.14) (2021-05-04)
+
+
+### Bug Fixes
+
+* **update:** optimize and clean code ([046e35b](https://github.com/ThornWalli/cuby-generator/commit/046e35b32910cd868c9e6b3cd3dcb8616b177ab5))
+
 ## [1.0.13](https://github.com/ThornWalli/cuby-generator/compare/v1.0.12...v1.0.13) (2021-05-04)
 
 
