@@ -83,7 +83,7 @@ export default {
     overrideConfig: {
       type: [Function, Object],
       default () {
-        return null;
+        return {};
       }
     }
   },
@@ -275,7 +275,7 @@ export default {
         this.renderTimeout = global.setTimeout(() => {
           const [width, height] = this.model.dimension;
           const { scale, mode } = this.model;
-          const model = this.overrideConfig() || Object.keys(this.model).reduce((result, key) => {
+          const model = Object.assign(Object.keys(this.model).reduce((result, key) => {
             if (typeof this.model[String(key)] === 'function') {
               result[String(key)] = this.model[String(key)];
             } else if (Array.isArray(this.model[String(key)])) {
@@ -290,7 +290,7 @@ export default {
               result[String(key)] = () => this.model[String(key)];
             }
             return result;
-          }, {});
+          }, {}), this.overrideConfig());
 
           this.setPreview({
             src: this.currentRenderType.draw({ width, height, scale: () => scale, mode }, model).toDataURL(),
