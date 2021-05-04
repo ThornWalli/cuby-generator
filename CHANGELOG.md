@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.17](https://github.com/ThornWalli/cuby-generator/compare/v1.0.16...v1.0.17) (2021-05-04)
+
+
+### Bug Fixes
+
+* **options:** fix missing renderType ([9c0d7b4](https://github.com/ThornWalli/cuby-generator/commit/9c0d7b46b401b74b1afdf8f8cd7702b43b2f7715))
+
 ## [1.0.16](https://github.com/ThornWalli/cuby-generator/compare/v1.0.15...v1.0.16) (2021-05-04)
 
 
