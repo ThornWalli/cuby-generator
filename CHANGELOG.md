@@ -1,5 +1,12 @@
 # Project Changelog
 
+## [1.0.15](https://github.com/ThornWalli/cuby-generator/compare/v1.0.14...v1.0.15) (2021-05-04)
+
+
+### Bug Fixes
+
+* **input:** fix input style ([2a50082](https://github.com/ThornWalli/cuby-generator/commit/2a50082c34625564bbff5b6fab9d3bb4583227fb))
+
 ## [1.0.14](https://github.com/ThornWalli/cuby-generator/compare/v1.0.13...v1.0.14) (2021-05-04)
 
 
