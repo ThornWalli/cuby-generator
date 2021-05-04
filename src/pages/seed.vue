@@ -12,12 +12,12 @@
         <molecule-property
           v-for="input in inputs"
           :key="input.name"
-          v-model="model[input.name]"
           :icon="input.icon"
           :component="input.component"
           :options="input.options"
           :label="input.label"
           :value="model[input.name]"
+          @input="model[input.name] = $event; refreshModel()"
         />
         <div class="seed-input">
           <atom-base-input v-model="seed" :value="seed" label="Seed:" />
@@ -55,10 +55,16 @@ export default {
     FaceGenerator, MoleculeProperty, AtomBaseButton, AtomBaseInput
   },
   data () {
+    let relativeOffset = this.$route.query.relativeOffset;
+    if (relativeOffset && Array.isArray(relativeOffset) && relativeOffset.length === 2) {
+      relativeOffset = this.$route.query.relativeOffset.map(value => Number(value));
+    } else {
+      relativeOffset = [0, 0];
+    }
     return {
-      model: {},
+      model: { relativeOffset },
       renderType: null,
-      seed: this.$route.query.seed || 'cuby'
+      seed: this.$route.query.seed || 'Cuby'
     };
   },
   computed: {
@@ -68,7 +74,9 @@ export default {
         let eyeRandom;
         return this.renderType.props.reduce((result, prop) => {
           if (prop.type === 'color') {
-            result[prop.name] = Array((prop.options && prop.options.count) || 1).fill(0).map(() => () => COLORS[Math.floor(getRandom() * (COLORS.length - 1))]);
+            result[prop.name] = Array((prop.options && prop.options.count) || 1).fill(0).map(() => () => {
+              return COLORS[Math.round(getRandom() * (COLORS.length - 1))];
+            });
           }
           return result;
         }, Object.assign(Object.keys(this.model).reduce((result, key) => {
@@ -95,7 +103,7 @@ export default {
   watch: {
     model: {
       handler () {
-        this.$refs.generator.render();
+        this.refreshModel();
       },
       deep: true
     },
@@ -114,6 +122,16 @@ export default {
     }
   },
   methods: {
+    refreshModel () {
+      global.setTimeout(() => {
+        this.$router.replace({
+          query: Object.assign({}, this.$route.query, this.model)
+        });
+      }, 0);
+      this.$nextTick(() => {
+        this.$refs.generator.render();
+      });
+    },
     onChangeRenderType (renderType) {
       this.renderType = renderType;
       this.model = this.inputs.reduce((result, prop) => {

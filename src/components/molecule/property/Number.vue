@@ -42,7 +42,7 @@ export default {
       default: true
     },
     value: {
-      type: Number,
+      type: [Number, String],
       default: null
     },
     min: {

@@ -8,12 +8,12 @@
         <molecule-property
           v-for="input in inputs"
           :key="input.name"
-          v-model="model[input.name]"
           :icon="input.icon"
           :component="input.component"
           :options="input.options"
           :label="input.label"
           :value="model[input.name]"
+          @input="model[input.name] = $event; refreshModel()"
         />
       </template>
       <template #controlsRightTop>
@@ -59,10 +59,17 @@ export default {
     } else {
       color = [COLORS[4]];
     }
+    let relativeOffset = this.$route.query.relativeOffset;
+    if (relativeOffset && Array.isArray(relativeOffset) && relativeOffset.length === 2) {
+      relativeOffset = this.$route.query.relativeOffset.map(value => Number(value));
+    } else {
+      relativeOffset = [0, 0];
+    }
 
     const eyeLeft = (assetManager.getAssetsByType(TYPES.EYE_LEFT)[this.$route.query.eyeLeft] && this.$route.query.eyeLeft) || 2;
     const eyeRight = (assetManager.getAssetsByType(TYPES.EYE_RIGHT)[this.$route.query.eyeRight] && this.$route.query.eyeRight) || 2;
     const mouth = (assetManager.getAssetsByType(TYPES.MOUTH)[this.$route.query.mouth] && this.$route.query.mouth) || 2;
+
     return {
       renderType: null,
       COLORS,
@@ -70,7 +77,8 @@ export default {
         color,
         eyeLeft,
         eyeRight,
-        mouth
+        mouth,
+        relativeOffset
       },
 
       rendering: null,
@@ -130,14 +138,7 @@ export default {
   watch: {
     model: {
       handler (model) {
-        global.setTimeout(() => {
-          this.$router.replace({
-            query: Object.assign({}, this.$route.query, model)
-          });
-        }, 0);
-        this.$nextTick(() => {
-          this.$refs.generator.render();
-        });
+        this.refreshModel();
       },
       deep: true
     }
@@ -161,6 +162,16 @@ export default {
     }));
   },
   methods: {
+    refreshModel () {
+      global.setTimeout(() => {
+        this.$router.replace({
+          query: Object.assign({}, this.$route.query, this.model)
+        });
+      }, 0);
+      this.$nextTick(() => {
+        this.$refs.generator.render();
+      });
+    },
     onChangeRenderType (renderType) {
       this.renderType = renderType;
       this.model = renderType.props.reduce((result, prop) => {
