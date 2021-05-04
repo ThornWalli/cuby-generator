@@ -4,21 +4,11 @@
       ref="generator"
       :has-preview="false"
       :filename="`image_${seed}`"
-      :config="config"
+      :override-config="config"
       @previewData="$store.dispatch('layout/setPreviewData', $event)"
-      @renderType="onChangeRenderType"
+      @renderType="onRenderType"
     >
       <template #controlsAfter>
-        <molecule-property
-          v-for="input in inputs"
-          :key="input.name"
-          :icon="input.icon"
-          :component="input.component"
-          :options="input.options"
-          :label="input.label"
-          :value="model[input.name]"
-          @input="model[input.name] = $event; refreshModel()"
-        />
         <div class="seed-input">
           <atom-base-input v-model="seed" :value="seed" label="Seed:" />
         </div>
@@ -41,7 +31,6 @@
 import seedrandom from 'seedrandom';
 
 import FaceGenerator from '@/components/FaceGenerator';
-import MoleculeProperty from '@/components/molecule/Property';
 import AtomBaseButton from '@/components/atoms/BaseButton';
 import AtomBaseInput from '@/components/atoms/BaseInput';
 
@@ -52,22 +41,24 @@ import { TYPES } from '../classes/AssetManager';
 export default {
   transitions: 'page',
   components: {
-    FaceGenerator, MoleculeProperty, AtomBaseButton, AtomBaseInput
+    FaceGenerator, AtomBaseButton, AtomBaseInput
   },
   data () {
-    let relativeOffset = this.$route.query.relativeOffset;
-    if (relativeOffset && Array.isArray(relativeOffset) && relativeOffset.length === 2) {
-      relativeOffset = this.$route.query.relativeOffset.map(value => Number(value));
-    } else {
-      relativeOffset = [0, 0];
-    }
     return {
-      model: { relativeOffset },
       renderType: null,
       seed: this.$route.query.seed || 'Cuby'
     };
   },
   computed: {
+    model () {
+      const getRandom = seedrandom(this.seed);
+      let eyeRandom;
+      return {
+        eyeLeft: () => (eyeRandom = Math.floor(getRandom() * assetManager.getAssetsByType(TYPES.EYE_LEFT).length)),
+        eyeRight: () => eyeRandom,
+        mouth: () => Math.floor(getRandom() * assetManager.getAssetsByType(TYPES.MOUTH).length)
+      };
+    },
     config () {
       return () => {
         const getRandom = seedrandom(this.seed);
@@ -101,12 +92,6 @@ export default {
     }
   },
   watch: {
-    model: {
-      handler () {
-        this.refreshModel();
-      },
-      deep: true
-    },
     seed: {
       handler (value, lastValue) {
         if (lastValue) {
@@ -122,22 +107,8 @@ export default {
     }
   },
   methods: {
-    refreshModel () {
-      global.setTimeout(() => {
-        this.$router.replace({
-          query: Object.assign({}, this.$route.query, this.model)
-        });
-      }, 0);
-      this.$nextTick(() => {
-        this.$refs.generator.render();
-      });
-    },
-    onChangeRenderType (renderType) {
+    onRenderType (renderType) {
       this.renderType = renderType;
-      this.model = this.inputs.reduce((result, prop) => {
-        result[prop.name] = this.model[prop.name] || prop.default;
-        return result;
-      }, {});
     }
   }
 };

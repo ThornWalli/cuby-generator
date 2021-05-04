@@ -3,7 +3,7 @@
     <div v-if="active" class="molecule-property-color-select">
       <div v-for="(item, index) in colors" :key="index">
         <input ref="input" :value="value[index]" type="color" @input="input(index, $event.target.value)">
-        <icon-button @click="input(index, COLORS[(Math.max(COLORS.indexOf(value[index]), 0) + 1) % COLORS.length])">
+        <icon-button @click="input(index, RANDOM_COLORS[(Math.max(RANDOM_COLORS.indexOf(value[index]), 0) + 1) % RANDOM_COLORS.length])">
           <svg-icon-refresh />
         </icon-button>
       </div>
@@ -14,7 +14,7 @@
 <script>
 import IconButton from '@/components/atoms/IconButton';
 import SvgIconRefresh from '@/assets/svg/heroicons/refresh.svg?vue-template';
-import { COLORS } from '@/utils/color';
+import { RANDOM_COLORS } from '@/utils/color';
 
 export default {
   components: { SvgIconRefresh, IconButton },
@@ -36,7 +36,7 @@ export default {
   },
   data () {
     return {
-      COLORS,
+      RANDOM_COLORS,
       model: {},
       inputTimeout: null
     };

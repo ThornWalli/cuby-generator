@@ -2,6 +2,7 @@
 import ColorSelect from '@/components/molecule/property/ColorSelect';
 import Number from '@/components/molecule/property/Number';
 import Dimension from '@/components/molecule/property/Dimension';
+import ItemSelect from '@/components/molecule/property/ItemSelect';
 
 export const PROPERTY_TYPES = {
   color: {
@@ -21,6 +22,10 @@ export const PROPERTY_TYPES = {
   dimension: {
     component: Dimension,
     type: 'dimension'
+  },
+  items: {
+    component: ItemSelect,
+    type: 'items'
   }
 };
 

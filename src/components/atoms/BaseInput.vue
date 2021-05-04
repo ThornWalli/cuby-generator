@@ -41,14 +41,23 @@ export default {
 <style lang="postcss" scoped>
 .atom-base-input {
   display: inline-flex;
+  width: calc(200 / 414 * 100vw);
   padding: 0;
   font-weight: bold;
   background: #fff;
   border-radius: calc(3 / 16 * 1rem);
-  backdrop-filter: blur(8px);
   box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
   opacity: 0.9;
   transition: opacity 0.3s;
+  backdrop-filter: blur(8px);
+
+  @media (min-width: 576px) {
+    width: 200px;
+  }
+
+  @media (min-width: 768px) {
+    width: auto;
+  }
 
   & span {
     margin-right: calc(5 / 16 * 1rem);

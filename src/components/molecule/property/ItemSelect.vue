@@ -2,7 +2,7 @@
   <transition-group name="fade" class="molecule-property-item-select" tag="ul" appear>
     <li v-for="item in filteredItems" :key="item.label">
       <label>
-        <input :name="name" :value="item.value" type="radio" :checked="Number(value) === Number(item.value)" @input="$emit('input', $event.target.value)">
+        <input :name="name" :value="item.value" type="radio" :checked="String(value) === String(item.value)" @input="$emit('input', $event.target.value)">
         <div>
           <component :is="item.component" v-if="item.component" />
           <img v-else-if="item.imageSrc" :src="item.imageSrc">

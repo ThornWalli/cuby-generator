@@ -1,21 +1,12 @@
 <template>
   <div>
-    <face-generator ref="generator" :has-preview="false" :config="config" @previewData="$store.dispatch('layout/setPreviewData', $event)" @renderType="onChangeRenderType">
-      <template #controlsAfter>
-        <molecule-property v-model="model.eyeLeft" v-bind="propertyLeftEye" :value="model.eyeLeft" />
-        <molecule-property v-model="model.eyeRight" v-bind="propertyRightEye" :value="model.eyeRight" />
-        <molecule-property v-model="model.mouth" v-bind="propertyMouth" :value="model.mouth" />
-        <molecule-property
-          v-for="input in inputs"
-          :key="input.name"
-          :icon="input.icon"
-          :component="input.component"
-          :options="input.options"
-          :label="input.label"
-          :value="model[input.name]"
-          @input="model[input.name] = $event; refreshModel()"
-        />
-      </template>
+    <face-generator
+      ref="generator"
+      :model-extend="model"
+      :inputs="inputs"
+      :has-preview="false"
+      @previewData="$store.dispatch('layout/setPreviewData', $event)"
+    >
       <template #controlsRightTop>
         <atom-base-button
           :to="{
@@ -31,7 +22,6 @@
 </template>
 <script>
 import FaceGenerator from '@/components/FaceGenerator';
-import MoleculeProperty from '@/components/molecule/Property';
 import ItemSelect from '@/components/molecule/property/ItemSelect';
 import AtomBaseButton from '@/components/atoms/BaseButton';
 
@@ -45,139 +35,108 @@ import { COLORS } from '../utils/color';
 
 export default {
   transitions: 'page',
+
   components: {
     FaceGenerator,
-    MoleculeProperty,
     AtomBaseButton
   },
+
   data () {
-    let color;
-    if (this.$route.query.color) {
-      if (!Array.isArray(this.$route.query.color)) {
-        color = [this.$route.query.color];
-      }
-    } else {
-      color = [COLORS[4]];
-    }
-    let relativeOffset = this.$route.query.relativeOffset;
-    if (relativeOffset && Array.isArray(relativeOffset) && relativeOffset.length === 2) {
-      relativeOffset = this.$route.query.relativeOffset.map(value => Number(value));
-    } else {
-      relativeOffset = [0, 0];
-    }
-
-    const eyeLeft = (assetManager.getAssetsByType(TYPES.EYE_LEFT)[this.$route.query.eyeLeft] && this.$route.query.eyeLeft) || 2;
-    const eyeRight = (assetManager.getAssetsByType(TYPES.EYE_RIGHT)[this.$route.query.eyeRight] && this.$route.query.eyeRight) || 2;
-    const mouth = (assetManager.getAssetsByType(TYPES.MOUTH)[this.$route.query.mouth] && this.$route.query.mouth) || 2;
-
     return {
-      renderType: null,
       COLORS,
-      model: {
-        color,
-        eyeLeft,
-        eyeRight,
-        mouth,
-        relativeOffset
-      },
-
-      rendering: null,
-      leftEyes: [],
-      rightEyes: [],
-      mouths: []
+      model: this.getModel(),
+      faceInputs: []
     };
   },
+
   computed: {
-    propertyLeftEye () {
-      return {
-        icon: SvgControlsEyeLeft,
-        component: ItemSelect,
-        label: 'Eye Left',
-        options: {
-          items: this.leftEyes
-        }
-      };
-    },
-    propertyRightEye () {
-      return {
-        icon: SvgControlsEyeRight,
-        component: ItemSelect,
-        label: 'Eye Right',
-        options: {
-          items: this.rightEyes
-        }
-      };
-    },
-    propertyMouth () {
-      return {
-        icon: SvgControlsMouth,
-        component: ItemSelect,
-        label: 'Mouth',
-        options: {
-          items: this.mouths
-        }
-      };
-    },
-    config () {
-      return () => Object.keys(this.model).reduce((result, key) => {
-        if (Array.isArray(this.model[String(key)])) {
-          result[String(key)] = this.model[String(key)].map(value => () => value);
-        } else {
-          result[String(key)] = () => this.model[String(key)];
-        }
-        return result;
-      }, {});
-    },
     inputs () {
-      const inputs = (this.renderType && this.renderType.props) || [];
+      const inputs = [
+        ...this.faceInputs
+      ];
       return inputs.map((input) => {
         return Object.assign({}, input);
       });
     }
   },
-  watch: {
-    model: {
-      handler (model) {
-        this.refreshModel();
-      },
-      deep: true
-    }
-  },
+
   async mounted () {
-    await assetManager.ready;
-    this.leftEyes = assetManager.getAssetsByType(TYPES.EYE_LEFT).map((asset, index) => ({
-      label: `Eye ${index}`,
-      value: index,
-      imageSrc: asset.images[MODE.COLOR].src
-    }));
-    this.rightEyes = assetManager.getAssetsByType(TYPES.EYE_RIGHT).map((asset, index) => ({
-      label: `Eye ${index}`,
-      value: index,
-      imageSrc: asset.images[MODE.COLOR].src
-    }));
-    this.mouths = assetManager.getAssetsByType(TYPES.MOUTH).map((asset, index) => ({
-      label: `Mouth ${index}`,
-      value: index,
-      imageSrc: asset.images[MODE.COLOR].src
-    }));
+    this.faceInputs = await this.getFaceInputs();
   },
+
   methods: {
-    refreshModel () {
-      global.setTimeout(() => {
-        this.$router.replace({
-          query: Object.assign({}, this.$route.query, this.model)
-        });
-      }, 0);
-      this.$nextTick(() => {
-        this.$refs.generator.render();
-      });
+
+    getModel () {
+      let color;
+      if (this.$route.query.color) {
+        if (!Array.isArray(this.$route.query.color)) {
+          color = [this.$route.query.color];
+        }
+      } else {
+        color = [COLORS[4]];
+      }
+      let relativeOffset = this.$route.query.relativeOffset;
+      if (relativeOffset && Array.isArray(relativeOffset) && relativeOffset.length === 2) {
+        relativeOffset = this.$route.query.relativeOffset.map(value => Number(value));
+      } else {
+        relativeOffset = [0, 0];
+      }
+
+      const eyeLeft = (assetManager.getAssetsByType(TYPES.EYE_LEFT)[this.$route.query.eyeLeft] && this.$route.query.eyeLeft) || 2;
+      const eyeRight = (assetManager.getAssetsByType(TYPES.EYE_RIGHT)[this.$route.query.eyeRight] && this.$route.query.eyeRight) || 2;
+      const mouth = (assetManager.getAssetsByType(TYPES.MOUTH)[this.$route.query.mouth] && this.$route.query.mouth) || 2;
+
+      return {
+        color,
+        eyeLeft,
+        eyeRight,
+        mouth,
+        relativeOffset
+      };
     },
-    onChangeRenderType (renderType) {
-      this.renderType = renderType;
-      this.model = renderType.props.reduce((result, prop) => {
-        result[prop.name] = this.model[prop.name] || prop.default;
-        return result;
-      }, this.model);
+    async getFaceInputs () {
+      await assetManager.ready;
+      return [
+        {
+          icon: SvgControlsEyeLeft,
+          component: ItemSelect,
+          name: 'eyeLeft',
+          label: 'Eye Left',
+          options: {
+            items: assetManager.getAssetsByType(TYPES.EYE_LEFT).map((asset, index) => ({
+              label: `Eye ${index}`,
+              value: index,
+              imageSrc: asset.images[MODE.COLOR].src
+            }))
+          }
+        },
+        {
+          icon: SvgControlsEyeRight,
+          component: ItemSelect,
+          name: 'eyeRight',
+          label: 'Eye Right',
+          options: {
+            items: assetManager.getAssetsByType(TYPES.EYE_RIGHT).map((asset, index) => ({
+              label: `Eye ${index}`,
+              value: index,
+              imageSrc: asset.images[MODE.COLOR].src
+            }))
+          }
+        },
+        {
+          icon: SvgControlsMouth,
+          component: ItemSelect,
+          name: 'mouth',
+          label: 'Mouth',
+          options: {
+            items: assetManager.getAssetsByType(TYPES.MOUTH).map((asset, index) => ({
+              label: `Mouth ${index}`,
+              value: index,
+              imageSrc: asset.images[MODE.COLOR].src
+            }))
+          }
+        }
+      ];
     }
   }
 };

@@ -5,10 +5,17 @@
     <div class="face-generator__controls face-generator__controls--left-bottom face-generator__properties">
       <span class="separator" />
       <slot name="controlsBefore" />
-      <molecule-property v-model="model.dimension" v-bind="propertyDimension" :value="model.dimension" />
-      <molecule-property v-model="renderType" v-bind="propertyRenderType" :value="renderType" />
-      <molecule-property v-model="model.mode" v-bind="propertyMode" :value="model.mode" />
-      <molecule-property v-model="model.scale" v-bind="propertyScale" :value="model.scale" />
+      <molecule-property
+        v-for="input in preparedInputs"
+        :key="input.name"
+        v-model="model[input.name]"
+        :icon="input.icon"
+        :component="input.component"
+        :options="input.options"
+        :label="input.label"
+        :value="model[input.name]"
+      />
+
       <slot name="controlsAfter" />
     </div>
     <div class="face-generator__controls face-generator__controls--left-top">
@@ -29,7 +36,6 @@
 </template>
 <script>
 import assetManager from '@/services/assetManager';
-import { COLORS } from '@/utils/color';
 import { ipoint } from '@js-basics/vector';
 
 import AtomPreview from '@/components/atoms/Preview';
@@ -38,7 +44,6 @@ import MoleculeProperty from '@/components/molecule/Property';
 
 import Face from '@/classes/renderType/Face';
 import TileWall from '@/classes/renderType/TileWall';
-import ItemSelect from '@/components/molecule/property/ItemSelect';
 
 import SvgControlsDimension from '@/assets/svg/controls/controls_dimension.svg?vue-template';
 import SvgControlsMode from '@/assets/svg/controls/controls_mode.svg?vue-template';
@@ -59,45 +64,38 @@ export default {
       type: Boolean,
       default: true
     },
-    config: {
-      type: Function,
+    modelExtend: {
+      type: Object,
       default () {
-        return {
-          color: () => COLORS[0],
-          face: () => [2, 2, 2]
-        };
+        return {};
       }
     },
     filename: {
       type: String,
       default: 'image'
+    },
+    inputs: {
+      type: Array,
+      default () {
+        return [];
+      }
+    },
+    overrideConfig: {
+      type: [Function, Object],
+      default () {
+        return null;
+      }
     }
   },
   data () {
     const renderTypes = [new Face(), new TileWall()];
-
-    let dimension = this.$route.query.dimension;
-    if (dimension && Array.isArray(dimension) && dimension.length === 2) {
-      dimension = this.$route.query.dimension.map(value => Number(value));
-    } else {
-      dimension = getScreenDimension();
-    }
-
-    const mode = (Object.values(MODE).includes(this.$route.query.mode) && this.$route.query.mode) || MODE.COLOR;
-    const renderType = (renderTypes.find(({ name }) => name === this.$route.query.renderType) && this.$route.query.renderType) || renderTypes[0].name;
-
     return {
       showSharing: !!global.navigator.share,
       screen,
-      model: {
-        mode,
-        scale: parseFloat(this.$route.query.scale) || 1,
-        dimension
-      },
+      model: Object.assign(this.getModel(renderTypes), this.modelExtend),
       currentRenderType: null,
       renderTimeout: null,
       renderFn: null,
-      renderType,
       renderTypes,
       previewData: {
         // eslint-disable-next-line no-secrets/no-secrets
@@ -108,60 +106,15 @@ export default {
   },
   computed: {
 
-    propertyDimension () {
-      return getProperty('dimension', 'dimension', 'Dimension', {
-        icon: SvgControlsDimension,
-        options: { showRatioLocked: true, showApplyScreen: true }
+    preparedInputs () {
+      const inputs = [
+        ...this.getInputs(),
+        ...this.inputs,
+        ...(this.currentRenderType && this.currentRenderType.props) || []
+      ];
+      return inputs.map((input) => {
+        return Object.assign({}, input);
       });
-    },
-
-    propertyMode () {
-      const icons = {
-        [MODE.COLOR]: SvgControlsModeColor,
-        [MODE.ALPHA]: SvgControlsModeAlpha
-      };
-      return {
-        icon: SvgControlsMode,
-        component: ItemSelect,
-        options: {
-          items: Object.entries(MODE).map(([label, value]) => {
-            return {
-              component: icons[String(value)],
-              label,
-              value
-            };
-          })
-        }
-      };
-    },
-
-    propertyScale () {
-      return getProperty('number', 'scale', 'Scale', {
-        icon: SvgControlsScale,
-        availableViews: ['seed'],
-        default: 1,
-        options: {
-          step: 0.1,
-          min: 0,
-          max: 10
-        }
-      });
-    },
-
-    propertyRenderType () {
-      return {
-        icon: SvgControlsType,
-        component: ItemSelect,
-        options: {
-          items: this.renderTypes.map((type) => {
-            return {
-              component: type.icon,
-              label: type.name,
-              value: type.name
-            };
-          })
-        }
-      };
     },
 
     modeOptions () {
@@ -189,14 +142,20 @@ export default {
       },
       deep: true
     },
-    renderType: {
-      async handler (name, lastValue) {
-        await assetManager.ready;
-        this.updateRoute();
+    'model.renderType': {
+      async handler (name) {
+        if (this.renderTypes) {
+          await assetManager.ready;
+          // this.updateRoute();
+          this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
+          this.render();
+          this.$emit('renderType', this.currentRenderType);
 
-        this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
-        this.render();
-        this.$emit('renderType', this.currentRenderType);
+          this.model = this.currentRenderType.props.reduce((result, prop) => {
+            result[prop.name] = this.model[prop.name] || prop.default;
+            return result;
+          }, this.model);
+        }
       },
       immediate: true
     }
@@ -205,6 +164,75 @@ export default {
     await assetManager.setup();
   },
   methods: {
+
+    getInputs () {
+      const modeIcons = {
+        [MODE.COLOR]: SvgControlsModeColor,
+        [MODE.ALPHA]: SvgControlsModeAlpha
+      };
+      return [
+        getProperty('dimension', 'dimension', 'Dimension', {
+          icon: SvgControlsDimension,
+          options: { showRatioLocked: true, showApplyScreen: true }
+        }),
+        getProperty('items', 'mode', 'Mode', {
+          icon: SvgControlsMode,
+          options: {
+            items: Object.entries(MODE).map(([label, value]) => {
+              return {
+                component: modeIcons[String(value)],
+                label,
+                value
+              };
+            })
+          }
+        }),
+
+        getProperty('number', 'scale', 'Scale', {
+          icon: SvgControlsScale,
+          availableViews: ['seed'],
+          default: 1,
+          options: {
+            step: 0.1,
+            min: 0,
+            max: 10
+          }
+        }),
+        getProperty('items', 'renderType', 'RenderType', {
+          icon: SvgControlsType,
+          options: {
+            items: this.renderTypes.map((type) => {
+              return {
+                component: type.icon,
+                label: type.name,
+                value: type.name
+              };
+            })
+          }
+        })
+
+      ];
+    },
+
+    getModel (renderTypes) {
+      const renderType = (renderTypes.find(({ name }) => name === this.$route.query.renderType) && this.$route.query.renderType) || renderTypes[0].name;
+
+      let dimension = this.$route.query.dimension;
+      if (dimension && Array.isArray(dimension) && dimension.length === 2) {
+        dimension = this.$route.query.dimension.map(value => Number(value));
+      } else {
+        dimension = getScreenDimension();
+      }
+
+      const mode = (Object.values(MODE).includes(this.$route.query.mode) && this.$route.query.mode) || MODE.COLOR;
+
+      return {
+        renderType,
+        mode,
+        scale: parseFloat(this.$route.query.scale) || 1,
+        dimension
+      };
+    },
     async onClickShare () {
       const title = 'Cuby Generator';
       const text = 'Create your Cuby image on https://cuby.lammpee.de';
@@ -247,8 +275,25 @@ export default {
         this.renderTimeout = global.setTimeout(() => {
           const [width, height] = this.model.dimension;
           const { scale, mode } = this.model;
+          const model = this.overrideConfig() || Object.keys(this.model).reduce((result, key) => {
+            if (typeof this.model[String(key)] === 'function') {
+              result[String(key)] = this.model[String(key)];
+            } else if (Array.isArray(this.model[String(key)])) {
+              result[String(key)] = this.model[String(key)].map((value) => {
+                if (typeof this.model[String(key)] === 'function') {
+                  return value;
+                } else {
+                  return () => value;
+                }
+              });
+            } else {
+              result[String(key)] = () => this.model[String(key)];
+            }
+            return result;
+          }, {});
+
           this.setPreview({
-            src: this.currentRenderType.draw({ width, height, scale: () => scale, mode }, this.config()).toDataURL(),
+            src: this.currentRenderType.draw({ width, height, scale: () => scale, mode }, model).toDataURL(),
             size: ipoint(width, height)
           });
           this.renderTimeout = null;
