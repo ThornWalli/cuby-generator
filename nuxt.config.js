@@ -1,4 +1,6 @@
 
+import fs from 'fs';
+import path from 'upath';
 import pkg from './package.json';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -11,8 +13,20 @@ export default {
   target: 'static',
 
   server: {
+    host: getHost(),
     port: getPort(),
-    host: getHost()
+    timing: false,
+    https: (function () {
+      const dir = './env/cert';
+      const key = path.join(dir, 'key.pem');
+      const crt = path.join(dir, 'cert.pem');
+
+      if (fs.existsSync(key) && fs.existsSync(crt)) {
+        return { key: fs.readFileSync(key), cert: fs.readFileSync(crt) };
+      } else {
+        return null;
+      }
+    })()
   },
 
   generate: {

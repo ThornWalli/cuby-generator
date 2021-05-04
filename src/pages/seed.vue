@@ -46,7 +46,7 @@ import AtomBaseButton from '@/components/atoms/BaseButton';
 import AtomBaseInput from '@/components/atoms/BaseInput';
 
 import assetManager from '../services/assetManager';
-import { COLORS } from '../utils/color';
+import { RANDOM_COLORS } from '../utils/color';
 import { TYPES } from '../classes/AssetManager';
 
 export default {
@@ -75,7 +75,7 @@ export default {
         return this.renderType.props.reduce((result, prop) => {
           if (prop.type === 'color') {
             result[prop.name] = Array((prop.options && prop.options.count) || 1).fill(0).map(() => () => {
-              return COLORS[Math.round(getRandom() * (COLORS.length - 1))];
+              return RANDOM_COLORS[Math.round(getRandom() * (RANDOM_COLORS.length - 1))];
             });
           }
           return result;

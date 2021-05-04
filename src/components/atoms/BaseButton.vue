@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" v-bind="$attrs" v-font="$getFont('BitFont')" class="atom-base-button">
+  <component :is="tag" v-bind="$attrs" v-font="$getFont('BitFont')" class="atom-base-button" v-on="$listeners">
     <slot>{{ label }}</slot>
   </component>
 </template>
@@ -28,6 +28,7 @@ export default {
   padding: calc(10 / 16 * 1rem) calc(20 / 16 * 1rem);
   font-size: calc(24 / 16 * 1rem);
   color: #fff;
+  text-align: center;
   text-decoration: none;
   letter-spacing: 0;
   letter-spacing: calc(1.4 / 16 * 1rem);

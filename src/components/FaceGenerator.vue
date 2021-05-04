@@ -16,6 +16,11 @@
         Download
       </atom-base-button>
     </div>
+    <div v-if="showSharing" class="face-generator__controls face-generator__controls--right-bottom">
+      <atom-base-button tag="button" @click="onClickShare">
+        Share
+      </atom-base-button>
+    </div>
 
     <div class="face-generator__controls face-generator__controls--right-top">
       <slot name="controlsRightTop" />
@@ -45,6 +50,7 @@ import SvgControlsType from '@/assets/svg/controls/controls_type.svg?vue-templat
 
 import { MODE } from '../classes/AssetManager';
 import { getProperty } from '../classes/renderType/properties';
+import { urlToBlob } from '../utils/blob';
 
 export default {
   components: { AtomPreview, AtomBaseButton, MoleculeProperty },
@@ -81,6 +87,7 @@ export default {
     const renderType = (renderTypes.find(({ name }) => name === this.$route.query.renderType) && this.$route.query.renderType) || renderTypes[0].name;
 
     return {
+      showSharing: !!global.navigator.share,
       screen,
       model: {
         mode,
@@ -198,6 +205,26 @@ export default {
     await assetManager.setup();
   },
   methods: {
+    async onClickShare () {
+      const title = 'Cuby Generator';
+      const text = 'Create your Cuby image on https://cuby.lammpee.de';
+      const filesArray = [new File([await urlToBlob(this.previewData.src)], `${Date.now()}_cuby.png`, { type: 'image/png' })];
+      if (global.navigator.canShare && global.navigator.canShare({ files: filesArray })) {
+        global.navigator.share({
+          files: filesArray,
+          title,
+          text
+        });
+      } if (global.navigator.share) {
+        global.navigator.share({
+          title,
+          text,
+          url: global.location.href
+        });
+      } else {
+        alert('Your system doesn\'t support sharing files.');
+      }
+    },
     updateRoute () {
       global.setTimeout(() => {
         this.$router.replace({
@@ -287,6 +314,11 @@ function getScreenDimension () {
     &.face-generator__controls--left-top {
       top: calc(20 / 16 * 1rem);
       left: calc(20 / 16 * 1rem);
+    }
+
+    &.face-generator__controls--right-bottom {
+      right: calc(20 / 16 * 1rem);
+      bottom: calc(20 / 16 * 1rem);
     }
   }
 }

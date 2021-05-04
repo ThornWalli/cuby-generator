@@ -1,16 +1,19 @@
 
-export const COLORS = [
+export const RANDOM_COLORS = [
   '#ff1d25',
   '#f15a24',
   '#ffd226',
   '#8cc63f',
   '#0066ff',
-  '#93278f',
+  '#93278f'
+];
+
+export const COLORS = [
+  ...RANDOM_COLORS,
   '#ffffff',
   '#000000',
   'rgba(0,0,0,0)'
 ];
-
 /**
  * Calculate brightness value by RGB or HEX color.
  * @param color (String) The color value in RGB or HEX (for example: #000000 || #000 || rgb(0,0,0) || rgba(0,0,0,0))
