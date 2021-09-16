@@ -1,8 +1,8 @@
 
-import ColorSelect from '@/components/molecule/property/ColorSelect';
-import Number from '@/components/molecule/property/Number';
-import Dimension from '@/components/molecule/property/Dimension';
-import ItemSelect from '@/components/molecule/property/ItemSelect';
+import ColorSelect from '@/components/molecules/property/ColorSelect';
+import Number from '@/components/molecules/property/Number';
+import Dimension from '@/components/molecules/property/Dimension';
+import ItemSelect from '@/components/molecules/property/ItemSelect';
 
 export const PROPERTY_TYPES = {
   color: {

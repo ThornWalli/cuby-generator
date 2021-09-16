@@ -11,7 +11,7 @@
     >
       <template #controlsAfter>
         <div class="seed-input">
-          <atom-base-input v-model="seed" :value="seed" label="Seed:" />
+          <atom-input-text v-model="seed" :value="seed" label="Seed:" />
         </div>
       </template>
       <template #controlsRightTop>
@@ -31,18 +31,20 @@
 <script>
 import seedrandom from 'seedrandom';
 
-import FaceGenerator from '@/components/FaceGenerator';
+import FaceGenerator from '@/components/organisms/FaceGenerator';
 import AtomBaseButton from '@/components/atoms/BaseButton';
-import AtomBaseInput from '@/components/atoms/BaseInput';
+import AtomInputText from '@/components/atoms/input/Text';
 
 import assetManager from '../services/assetManager';
 import { RANDOM_COLORS } from '../utils/color';
 import { TYPES } from '../classes/AssetManager';
+import ColorTexture from '../classes/ColorTexture';
+import { ALIGNMENT } from '../utils/face';
 
 export default {
   transitions: 'page',
   components: {
-    FaceGenerator, AtomBaseButton, AtomBaseInput
+    FaceGenerator, AtomBaseButton, AtomInputText
   },
   data () {
     return {
@@ -67,7 +69,7 @@ export default {
         return this.renderType.props.reduce((result, prop) => {
           if (prop.type === 'color') {
             result[prop.name] = Array((prop.options && prop.options.count) || 1).fill(0).map(() => () => {
-              return RANDOM_COLORS[Math.round(getRandom() * (RANDOM_COLORS.length - 1))];
+              return new ColorTexture({ color: RANDOM_COLORS[Math.round(getRandom() * (RANDOM_COLORS.length - 1))] });
             });
           }
           return result;
@@ -79,6 +81,7 @@ export default {
           }
           return result;
         }, {}), {
+          alignment: [() => ALIGNMENT.LEFT, () => ALIGNMENT.TOP, () => ALIGNMENT.RIGHT, () => ALIGNMENT.BOTTOM],
           eyeLeft: () => (eyeRandom = Math.floor(getRandom() * assetManager.getAssetsByType(TYPES.EYE_LEFT).length)),
           eyeRight: () => eyeRandom,
           mouth: () => Math.floor(getRandom() * assetManager.getAssetsByType(TYPES.MOUTH).length)

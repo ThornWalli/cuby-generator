@@ -2,7 +2,7 @@
   <div
     v-font="[
       $getFont('Open Sans', 400, 'normal'),
-      $getFont('BitFont', 400, 'normal', {selector:'.atom-base-button'})]"
+      $getFont('BitFont', 400, 'normal', {selector:'.atom-base-button.style-type--default'})]"
   >
     <atom-preview class="preview" v-bind="previewData" />
     <Nuxt />

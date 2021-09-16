@@ -21,8 +21,8 @@
   </div>
 </template>
 <script>
-import FaceGenerator from '@/components/FaceGenerator';
-import ItemSelect from '@/components/molecule/property/ItemSelect';
+import FaceGenerator from '@/components/organisms/FaceGenerator';
+import ItemSelect from '@/components/molecules/property/ItemSelect';
 import AtomBaseButton from '@/components/atoms/BaseButton';
 
 import SvgControlsEyeLeft from '@/assets/svg/controls/controls_eyeLeft.svg?vue-template';

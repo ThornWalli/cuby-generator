@@ -6,7 +6,9 @@ import SvgControlsTypeTileWall from '@/assets/svg/controls/controls_type_tile_wa
 import SvgControlsColor from '@/assets/svg/controls/controls_color.svg?vue-template';
 import SvgControlsOffset from '@/assets/svg/controls/controls_offset.svg?vue-template';
 import { ipoint } from '@js-basics/vector';
+import { createPattern } from '@@/src/utils/canvas';
 import { MODE } from '../AssetManager';
+import ColorTexture from '../ColorTexture';
 import { getProperty } from './properties';
 
 export default class TileWall extends RenderType {
@@ -14,7 +16,7 @@ export default class TileWall extends RenderType {
     icon = SvgControlsTypeTileWall
     props = [
       getProperty('color', 'color', 'Color A/B', {
-        default: [COLORS[6], COLORS[7]],
+        default: [new ColorTexture({ color: COLORS[6] }), new ColorTexture({ color: COLORS[7] })],
         icon: SvgControlsColor,
         options: {
           count: 2
@@ -26,22 +28,22 @@ export default class TileWall extends RenderType {
         default: ipoint(0, 0),
         options: {
           step: 0.25,
-          min: 0,
+          min: -1,
           max: 1
         }
       })
     ]
 
     draw ({ width, height, mode, scale }, {
-      color,
+      color: colorTexture,
       eyeLeft, eyeRight, mouth,
       relativeOffset
     }) {
       this.setSize(width, height);
-      let [colorA, colorB] = color;
+      let [colorTextureA, colorTextureB] = colorTexture;
 
-      colorA = colorA || (() => 'transparent');
-      colorB = colorB || (() => 'transparent');
+      colorTextureA = colorTextureA || (() => new ColorTexture({ color: 'transparent' }));
+      colorTextureB = colorTextureB || (() => new ColorTexture({ color: 'transparent' }));
 
       const { x: relativeOffsetX, y: relativeOffsetY } = relativeOffset();
       const context = this.context;
@@ -63,18 +65,31 @@ export default class TileWall extends RenderType {
             offsetX_ += size * relativeOffsetX;
           }
 
-          const color = x % 2 + y % 2 === 1 ? colorA() : colorB();
+          colorTexture = x % 2 + y % 2 === 1 ? colorTextureA() : colorTextureB();
           const face = createFace({
             eyeLeft: eyeLeft(),
             eyeRight: eyeRight(),
             mouth: mouth(),
             mode,
             size,
-            invert: mode === MODE.ALPHA && ((getBrightnessByColor(color) / 255) < 0.3)
+            invert: mode === MODE.ALPHA && ((getBrightnessByColor(colorTexture.color) / 255) < 0.3)
           });
 
-          context.fillStyle = color;
+          context.fillStyle = colorTexture.color;
           context.fillRect(x * size - offsetX_, y * size - offsetY_, size, size);
+
+          if (colorTexture.textureSrc) {
+            // const pattern = context.createPattern(urlToImage(colorTexture.textureSrc), 'repeat'); // Create a pattern with this image, and set it to "repeat".
+            // eslint-disable-next-line no-unused-vars
+            const { pattern, offset } = createPattern(colorTexture, { width: size, height: size });
+            context.fillStyle = pattern;
+
+            context.translate(offset[0], offset[1]);
+
+            context.fillRect(x * size - offsetX_ - offset[0], y * size - offsetY_ - offset[1], size, size);
+
+            context.translate(-1 * offset[0], -1 * offset[1]);
+          }
 
           context.drawImage(face, x * size - offsetX_, y * size - offsetY_, size, size);
         }

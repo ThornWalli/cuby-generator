@@ -5,7 +5,7 @@
       <icon-button @click="input((Number(value) - step).toFixed(2))">
         <svg-icon-minus />
       </icon-button>
-      <atom-base-input
+      <atom-input-text
         ref="input"
         type="number"
         :min="min"
@@ -23,7 +23,7 @@
 
 <script>
 import IconButton from '@/components/atoms/IconButton';
-import AtomBaseInput from '@/components/atoms/BaseInput';
+import AtomInputText from '@/components/atoms/input/Text';
 
 import SvgIconMinus from '@/assets/svg/heroicons/minus-sm.svg?vue-template';
 import SvgIconPlus from '@/assets/svg/heroicons/plus-sm.svg?vue-template';
@@ -31,7 +31,7 @@ import SvgIconPlus from '@/assets/svg/heroicons/plus-sm.svg?vue-template';
 export default {
   components: {
     IconButton,
-    AtomBaseInput,
+    AtomInputText,
 
     SvgIconMinus,
     SvgIconPlus
