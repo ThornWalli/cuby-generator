@@ -27,7 +27,7 @@
     "test": "npm run lint && npm run generate"
   },
   "dependencies": {
-    "@js-basics/vector": "1.57.0",
+    "@js-basics/vector": "2.0.9",
     "core-js": "3.11.2",
     "eslint-plugin-no-secrets": "0.8.9",
     "eslint-plugin-security": "1.4.0",
