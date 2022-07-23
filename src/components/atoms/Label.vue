@@ -120,9 +120,9 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    content: '';
+    content: "";
     border-radius: calc(3 / 16 * 1rem);
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
   }
 
   & > div {
@@ -149,7 +149,7 @@ export default {
     line-height: 1;
     color: var(--color-black);
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgb(0 0 0 / 10%);
     border-radius: 3px 0 0 3px;
     transition: border-color 0.3s, color 0.3s, background 0.3s;
   }

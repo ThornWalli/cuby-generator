@@ -127,7 +127,7 @@ export default {
     border: none;
     border-radius: calc(8 / 16 * 1rem);
     outline: none;
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
     appearance: none;
 
     &::-moz-color-swatch {
@@ -151,11 +151,11 @@ export default {
     padding: 0;
     overflow: hidden;
     background: var(--color-white);
-    background: url('@/assets/grid.png');
+    background: url("@/assets/grid.png");
     border: none;
     border-radius: calc(8 / 16 * 1rem);
     outline: none;
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
     appearance: none;
 
     & > div {
@@ -165,7 +165,7 @@ export default {
       background-image: var(--texture-src);
       background-position: center;
       background-size: auto calc(var(--texture-scale) * 100%);
-      box-shadow: inset 0 0 calc(10 / 16 * 1rem) rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 50%);
     }
   }
 

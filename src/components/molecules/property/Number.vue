@@ -94,7 +94,7 @@ export default {
     border: solid var(--color-white) calc(5 / 16 * 1rem);
     border-radius: calc(3 / 16 * 1rem);
     outline: none;
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
     opacity: 0.8;
     transition: opacity 0.3s;
     appearance: none;

@@ -35,13 +35,13 @@
 </template>
 
 <script>
+import { ipoint } from '@js-basics/vector';
 import AtomIconButton from '@/components/atoms/IconButton';
 import AtomInputText from '@/components/atoms/input/Text';
 import SvgIconDesktopComputer from '@/assets/svg/heroicons/desktop-computer.svg?vue-template';
 import SvgIconLockOpen from '@/assets/svg/heroicons/lock-open.svg?vue-template';
 import SvgIconLockClosed from '@/assets/svg/heroicons/lock-closed.svg?vue-template';
 import SvgIconSwitchHorizontal from '@/assets/svg/heroicons/switch-horizontal.svg?vue-template';
-import { ipoint } from '@js-basics/vector';
 
 export default {
   components: { AtomIconButton, AtomInputText, SvgIconDesktopComputer, SvgIconSwitchHorizontal, SvgIconLockOpen, SvgIconLockClosed },

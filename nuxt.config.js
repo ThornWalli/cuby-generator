@@ -68,10 +68,9 @@ export default {
   components: false,
 
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    '@nuxt/postcss8',
     '@nuxtjs/pwa'
   ],
 
@@ -198,11 +197,30 @@ export default {
 
     postcss: {
       plugins: {
-        'postcss-nesting': {}
-      }
+        'postcss-preset-env': {
+          preserve: true,
+          stage: 0,
+          features: {
+            'custom-properties': {
+              disableDeprecationNotice: true
+            },
+            'nesting-rules': true
+          }
+        },
+        'postcss-normalize': {},
+        cssnano: {
+          preset: [
+            'default', {
+              discardDuplicates: false,
+              mergeRules: false
+            }
+          ]
+        }
+      },
+      order: 'cssnanoLast'
     }
-
   }
+
 };
 
 function getBasePath () {

@@ -124,14 +124,13 @@ export default {
 
   & .form__inputs {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
 
     & > * {
       display: flex;
       padding: calc(10 / 16 * 1rem);
 
-      & >>> > * {
+      & > :deep(*) {
         flex: 1;
       }
     }

@@ -31,15 +31,14 @@
 <script>
 import seedrandom from 'seedrandom';
 
-import FaceGenerator from '@/components/organisms/FaceGenerator';
-import AtomBaseButton from '@/components/atoms/BaseButton';
-import AtomInputText from '@/components/atoms/input/Text';
-
 import assetManager from '../services/assetManager';
 import { RANDOM_COLORS } from '../utils/color';
 import { TYPES } from '../classes/AssetManager';
 import ColorTexture from '../classes/ColorTexture';
 import { ALIGNMENT } from '../utils/face';
+import AtomInputText from '@/components/atoms/input/Text';
+import AtomBaseButton from '@/components/atoms/BaseButton';
+import FaceGenerator from '@/components/organisms/FaceGenerator';
 
 export default {
   transitions: 'page',

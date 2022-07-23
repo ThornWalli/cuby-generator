@@ -12,17 +12,17 @@
 
 <script>
 /* eslint-disable no-unused-vars */
+import { ipoint } from '@js-basics/vector';
+import { blobToObjectUrl } from '@@/src/utils/blob';
+import ColorTexture from '@@/src/classes/ColorTexture';
+import { ALIGNMENT } from '@@/src/utils/face';
 import AtomPreview from '@/components/atoms/Preview';
 import MoleculeForm from '@/components/molecules/Form';
 import AtomInputText from '@/components/atoms/input/Text';
 import AtomInputColor from '@/components/atoms/input/Color';
 import AtomInputTexture from '@/components/atoms/input/Texture';
-import { ipoint } from '@js-basics/vector';
 
 import Face from '@/classes/renderType/Face';
-import { blobToObjectUrl } from '@@/src/utils/blob';
-import ColorTexture from '@@/src/classes/ColorTexture';
-import { ALIGNMENT } from '@@/src/utils/face';
 
 export default {
   components: { AtomPreview, MoleculeForm },
@@ -149,7 +149,7 @@ export default {
     & > div {
       position: relative;
       padding-top: calc(128 / 16 * 1rem);
-      background: url('@/assets/grid.png');
+      background: url("@/assets/grid.png");
       border: solid var(--color-light-grey) 1px;
 
       & > * {
@@ -163,7 +163,7 @@ export default {
         background-image: var(--texture-src);
         background-position: center;
         background-size: auto calc(var(--texture-scale) * 100%); */
-        box-shadow: inset 0 0 calc(10 / 16 * 1rem) rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 50%);
 
         & img {
           object-fit: contain;

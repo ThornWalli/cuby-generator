@@ -36,10 +36,10 @@
 </template>
 
 <script>
+import { blobToBase64 } from '@@/src/utils/blob';
 import SvgIconUpload from '@/assets/svg/heroicons/upload.svg?vue-template';
 import AtomLabel from '@/components/atoms/Label';
 import ValidationMixin from '@/mixins/Validation';
-import { blobToBase64 } from '@@/src/utils/blob';
 
 export default {
 
@@ -149,10 +149,10 @@ export default {
       width: 100%;
       height: 100%;
       pointer-events: none;
-      content: '';
+      content: "";
 
       /* background: rgba(0, 0, 0, 0.5); */
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0) calc(100% / 3), rgba(255, 255, 255, 1) 100%);
+      background: linear-gradient(135deg, rgb(255 255 255 / 0%) calc(100% / 3), rgb(255 255 255 / 100%) 100%);
 
       /* opacity: 0; */
       transition: opacity 0.3s;

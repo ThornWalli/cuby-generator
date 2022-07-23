@@ -91,7 +91,7 @@ export default {
 
   &::backdrop {
     display: block;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgb(0 0 0 / 20%);
     backdrop-filter: blur(6px);
   }
 
@@ -123,7 +123,7 @@ export default {
     background: #fff;
     border: none;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px rgb(0 0 0 / 60%);
   }
 
   & .dialog-enter-active,

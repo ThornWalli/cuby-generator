@@ -67,13 +67,13 @@ export default {
     background: var(--color-base);
     border: solid #000 calc(4 / 16 * 1rem);
     border-radius: calc(8 / 16 * 1rem);
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 30%);
     transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
 
     @media (hover: none) {
       &:active {
         background: var(--color-red);
-        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
         transform: scale(0.9);
       }
     }
@@ -81,7 +81,7 @@ export default {
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         background: var(--color-red);
-        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
       }
 
       &:active {
@@ -99,7 +99,7 @@ export default {
     background: var(--color-base);
     border: solid var(--color-white) calc(5 / 16 * 1rem);
     border-radius: calc(3 / 16 * 1rem);
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 30%);
     transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;
@@ -107,7 +107,7 @@ export default {
     @media (hover: none) {
       &:active {
         background: var(--color-red);
-        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
         transform: scale(0.9);
       }
     }
@@ -115,7 +115,7 @@ export default {
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         background: var(--color-red);
-        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
       }
 
       &:active {

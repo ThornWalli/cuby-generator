@@ -49,7 +49,7 @@ export default {
 
   & .style-type--default {
     & img {
-      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
     }
   }
 }

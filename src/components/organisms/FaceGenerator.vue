@@ -37,8 +37,12 @@
 </template>
 <script>
 
-import assetManager from '@/services/assetManager';
 import { IPoint, ipoint } from '@js-basics/vector';
+import ColorTexture from '@@/src/classes/ColorTexture';
+import { MODE } from '../../classes/AssetManager';
+import { getProperty } from '../../classes/renderType/properties';
+import { urlToBlob } from '../../utils/blob';
+import assetManager from '@/services/assetManager';
 
 import AtomPreview from '@/components/atoms/Preview';
 import AtomBaseButton from '@/components/atoms/BaseButton';
@@ -54,11 +58,6 @@ import SvgControlsModeAlpha from '@/assets/svg/controls/controls_mode_alpha.svg?
 import SvgControlsScale from '@/assets/svg/controls/controls_scale.svg?vue-template';
 
 import SvgControlsType from '@/assets/svg/controls/controls_type.svg?vue-template';
-
-import ColorTexture from '@@/src/classes/ColorTexture';
-import { MODE } from '../../classes/AssetManager';
-import { getProperty } from '../../classes/renderType/properties';
-import { urlToBlob } from '../../utils/blob';
 
 export default {
   components: { AtomPreview, AtomBaseButton, MoleculeProperty },
