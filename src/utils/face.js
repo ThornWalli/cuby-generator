@@ -1,6 +1,14 @@
 import { TYPES } from '../classes/AssetManager';
 import assetManager from '../services/assetManager';
 
+export const ALIGNMENT = { LEFT: 'left', TOP: 'top', RIGHT: 'right', BOTTOM: 'bottom' };
+export const ALIGNMENT_ICONS = {
+  [ALIGNMENT.LEFT]: require('@/assets/svg/controls/controls_align_left.svg').default,
+  [ALIGNMENT.TOP]: require('@/assets/svg/controls/controls_align_top.svg').default,
+  [ALIGNMENT.RIGHT]: require('@/assets/svg/controls/controls_align_right.svg').default,
+  [ALIGNMENT.BOTTOM]: require('@/assets/svg/controls/controls_align_bottom.svg').default
+};
+
 let canvas;
 export function createFace ({
   invert, eyeLeft,

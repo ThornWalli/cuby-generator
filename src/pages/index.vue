@@ -21,8 +21,10 @@
   </div>
 </template>
 <script>
-import FaceGenerator from '@/components/FaceGenerator';
-import ItemSelect from '@/components/molecule/property/ItemSelect';
+import { MODE, TYPES } from '../classes/AssetManager';
+import { COLORS } from '../utils/color';
+import FaceGenerator from '@/components/organisms/FaceGenerator';
+import ItemSelect from '@/components/molecules/property/ItemSelect';
 import AtomBaseButton from '@/components/atoms/BaseButton';
 
 import SvgControlsEyeLeft from '@/assets/svg/controls/controls_eyeLeft.svg?vue-template';
@@ -30,8 +32,6 @@ import SvgControlsEyeRight from '@/assets/svg/controls/controls_eyeRight.svg?vue
 import SvgControlsMouth from '@/assets/svg/controls/controls_mouth.svg?vue-template';
 
 import assetManager from '@/services/assetManager';
-import { MODE, TYPES } from '../classes/AssetManager';
-import { COLORS } from '../utils/color';
 
 export default {
   transitions: 'page',
@@ -126,7 +126,6 @@ export default {
 </script>
 
 <style lang="postcss">
-
 .props {
   margin-bottom: calc(10 / 16 * 1rem);
 

@@ -2,7 +2,7 @@
 <template>
   <transition name="fade">
     <div v-if="active" class="molecule-property-dimension">
-      <atom-base-input
+      <atom-input-text
         class="property-dimension__input"
         :value="value.x"
         type="number"
@@ -14,7 +14,7 @@
       <atom-icon-button aria-label="Switch values" title="Switch values" @click="onClickRevertDimension">
         <svg-icon-switch-horizontal />
       </atom-icon-button>
-      <atom-base-input
+      <atom-input-text
         class="property-dimension__input"
         :value="value.y"
         type="number"
@@ -35,16 +35,16 @@
 </template>
 
 <script>
+import { ipoint } from '@js-basics/vector';
 import AtomIconButton from '@/components/atoms/IconButton';
-import AtomBaseInput from '@/components/atoms/BaseInput';
+import AtomInputText from '@/components/atoms/input/Text';
 import SvgIconDesktopComputer from '@/assets/svg/heroicons/desktop-computer.svg?vue-template';
 import SvgIconLockOpen from '@/assets/svg/heroicons/lock-open.svg?vue-template';
 import SvgIconLockClosed from '@/assets/svg/heroicons/lock-closed.svg?vue-template';
 import SvgIconSwitchHorizontal from '@/assets/svg/heroicons/switch-horizontal.svg?vue-template';
-import { ipoint } from '@js-basics/vector';
 
 export default {
-  components: { AtomIconButton, AtomBaseInput, SvgIconDesktopComputer, SvgIconSwitchHorizontal, SvgIconLockOpen, SvgIconLockClosed },
+  components: { AtomIconButton, AtomInputText, SvgIconDesktopComputer, SvgIconSwitchHorizontal, SvgIconLockOpen, SvgIconLockClosed },
   props: {
     active: {
       type: Boolean,

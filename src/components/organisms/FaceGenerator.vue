@@ -35,15 +35,18 @@
     </div>
   </div>
 </template>
-<script>/* eslint-disable no-unused-vars */
+<script>
 
-/* eslint-disable vue/no-unused-components */
-import assetManager from '@/services/assetManager';
 import { IPoint, ipoint } from '@js-basics/vector';
+import ColorTexture from '@@/src/classes/ColorTexture';
+import { MODE } from '../../classes/AssetManager';
+import { getProperty } from '../../classes/renderType/properties';
+import { urlToBlob } from '../../utils/blob';
+import assetManager from '@/services/assetManager';
 
 import AtomPreview from '@/components/atoms/Preview';
 import AtomBaseButton from '@/components/atoms/BaseButton';
-import MoleculeProperty from '@/components/molecule/Property';
+import MoleculeProperty from '@/components/molecules/Property';
 
 import Face from '@/classes/renderType/Face';
 import TileWall from '@/classes/renderType/TileWall';
@@ -55,10 +58,6 @@ import SvgControlsModeAlpha from '@/assets/svg/controls/controls_mode_alpha.svg?
 import SvgControlsScale from '@/assets/svg/controls/controls_scale.svg?vue-template';
 
 import SvgControlsType from '@/assets/svg/controls/controls_type.svg?vue-template';
-
-import { MODE } from '../classes/AssetManager';
-import { getProperty } from '../classes/renderType/properties';
-import { urlToBlob } from '../utils/blob';
 
 export default {
   components: { AtomPreview, AtomBaseButton, MoleculeProperty },
@@ -144,10 +143,8 @@ export default {
           await assetManager.ready;
           this.currentRenderType = this.renderTypes.find(renderType => renderType.name === name);
           this.applyInputs();
-          console.log('asasd');
           this.render();
           this.$emit('renderType', this.currentRenderType);
-          // this.updateRoute();
         }
       },
       immediate: true
@@ -234,7 +231,13 @@ export default {
               this.model[input.name] = this.model[input.name] || ipoint(...input.default);
             }
           } else if (input.type === 'color') {
-            this.model[input.name] = [].concat(this.$route.query[input.name] || this.model[input.name] || input.default);
+            this.model[input.name] = [].concat(this.$route.query[input.name] || this.model[input.name] || input.default).map((color) => {
+              if (color instanceof ColorTexture) {
+                return color;
+              } else {
+                return new ColorTexture({ color });
+              }
+            });
           } else {
             this.model[input.name] = this.model[input.name] || this.$route.query[input.name] || input.default;
           }
@@ -279,6 +282,14 @@ export default {
           query: Object.assign({}, this.$route.query, Object.fromEntries(Object.entries(this.model).map(([key, value]) => {
             if (value instanceof IPoint) {
               value = [value.x, value.y];
+            }
+            if (Array.isArray(value)) {
+              value = value.map((value) => {
+                if (value instanceof ColorTexture) {
+                  return value.color;
+                }
+                return value;
+              });
             }
             return [key, value];
           })))

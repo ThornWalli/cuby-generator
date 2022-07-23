@@ -5,11 +5,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "nuxt-speedkit/*": [
-        "lib/*"
-      ],
       "@/*": [
-        "example/*"
+        "./src/*"
       ],
       "@@/*": [
         "./*"

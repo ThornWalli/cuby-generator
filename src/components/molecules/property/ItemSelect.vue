@@ -2,7 +2,7 @@
   <transition-group name="fade" class="molecule-property-item-select" tag="ul" appear>
     <li v-for="item in filteredItems" :key="item.label">
       <label>
-        <input :name="name" :value="item.value" type="radio" :checked="String(value) === String(item.value)" @input="$emit('input', $event.target.value)">
+        <input :name="name" :value="item.value" :type="multiple ? 'checkbox' : 'radio'" :checked="checked(item)" @input="onInput($event, item)">
         <div>
           <component :is="item.component" v-if="item.component" />
           <img v-else-if="item.imageSrc" :src="item.imageSrc">
@@ -21,6 +21,10 @@ export default {
       type: Boolean,
       default: true
     },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
     items: {
       type: Array,
       default () {
@@ -30,7 +34,7 @@ export default {
       }
     },
     value: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null
     }
   },
@@ -43,6 +47,28 @@ export default {
   computed: {
     filteredItems () {
       return this.active ? this.items : [];
+    }
+  },
+  methods: {
+    checked (item) {
+      if (this.multiple) {
+        return (this.value || []).find(value => String(value) === String(item.value)) !== undefined;
+      } else {
+        return String(this.value) === String(item.value);
+      }
+    },
+    onInput (e, item) {
+      if (this.multiple) {
+        const value = new Set(this.value || []);
+        if (e.target.checked) {
+          value.add(e.target.value);
+        } else {
+          value.delete(e.target.value);
+        }
+        this.$emit('input', Array.from(value));
+      } else {
+        this.$emit('input', e.target.value);
+      }
     }
   }
 };
@@ -72,7 +98,7 @@ export default {
       padding: calc(5 / 16 * 1rem);
       background: var(--color-white);
       border-radius: calc(8 / 16 * 1rem);
-      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 30%);
       opacity: 0.75;
       transition: opacity 0.3s, box-shadow 0.3s;
     }
@@ -90,7 +116,7 @@ export default {
     }
 
     & > input:checked + div {
-      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
       opacity: 1;
     }
 

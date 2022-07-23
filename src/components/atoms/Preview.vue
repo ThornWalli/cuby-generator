@@ -1,5 +1,5 @@
 <template>
-  <div class="atoms-preview">
+  <div class="atoms-preview" :class="{[`style-type--${styleType}`]:true}">
     <transition name="fade">
       <img :key="src" :src="src" :style="size.toCSSVars('size')">
     </transition>
@@ -7,8 +7,16 @@
 </template>
 
 <script>
+
+const STYLE_TYPES = ['default', 'color-texture'];
+
 export default {
   props: {
+    styleType: {
+      type: String,
+      default: STYLE_TYPES[0],
+      validator: value => (STYLE_TYPES.includes(value))
+    },
     src: {
       type: String,
       required: true
@@ -37,7 +45,12 @@ export default {
     height: calc(var(--size-y) * 1px);
     max-height: 100%;
     object-fit: cover;
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+  }
+
+  & .style-type--default {
+    & img {
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
+    }
   }
 }
 

@@ -1,9 +1,9 @@
 export default class Type {
-  width = 0
-  height = 0
-  props = []
-  canvas = null
-  context = null
+  width = 0;
+  height = 0;
+  props = [];
+  canvas = null;
+  context = null;
 
   constructor () {
     this.createCanvas();

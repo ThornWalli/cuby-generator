@@ -1,11 +1,11 @@
 
 export const RANDOM_COLORS = [
-  '#ff1d25',
-  '#f15a24',
-  '#ffd226',
-  '#8cc63f',
-  '#0066ff',
-  '#93278f'
+  '#ff1d25', // 0
+  '#f15a24', // 1
+  '#ffd226', // 2
+  '#8cc63f', // 3
+  '#0066ff', // 4
+  '#93278f' // 5
 ];
 
 export const COLORS = [

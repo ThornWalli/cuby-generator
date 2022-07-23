@@ -1,5 +1,8 @@
 {
   "*.(js|vue)": [
     "npm run lint:es"
+  ],
+  "*.(vue|css)": [
+    "npm run lint:style"
   ]
 }

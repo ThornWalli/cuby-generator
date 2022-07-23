@@ -56,7 +56,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-
 .molecule-property {
   display: flex;
   align-items: center;
@@ -69,12 +68,12 @@ export default {
     pointer-events: auto;
     cursor: pointer;
     background: none;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgb(255 255 255 / 80%);
     border: none;
     border: solid var(--color-white) calc(5 / 16 * 1rem + (5px - (5 / 16 * 1rem)));
     border-radius: calc(8 / 16 * 1rem);
     outline: none;
-    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.3);
+    box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 30%);
     opacity: 0.75;
     transition: box-shadow 0.6s, background-color 0.6s, opacity 0.6s;
     backdrop-filter: blur(8px);
@@ -99,7 +98,7 @@ export default {
     &:active {
       & button {
         background-color: var(--color-base);
-        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
         opacity: 1;
       }
     }
@@ -109,7 +108,7 @@ export default {
     &:hover {
       & button {
         background-color: var(--color-base);
-        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+        box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
         opacity: 1;
       }
     }
@@ -122,7 +121,7 @@ export default {
 
     & button {
       background-color: var(--color-base);
-      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0, 0, 0, 0.6);
+      box-shadow: 0 0 calc(10 / 16 * 1rem) rgb(0 0 0 / 60%);
       opacity: 1;
     }
 

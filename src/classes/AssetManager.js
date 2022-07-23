@@ -2,7 +2,7 @@ import { blobToImage, urlToBlob } from '../utils/blob';
 import Deferred from './Deferred';
 
 export default class AssetManager {
-  readyDeferred = new Deferred()
+  readyDeferred = new Deferred();
   constructor ({ assets }) {
     this.assets = assets;
   }
