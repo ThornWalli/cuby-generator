@@ -1,5 +1,12 @@
 # Project Changelog
 
+# [1.1.0](https://github.com/ThornWalli/cuby-generator/compare/v1.0.18...v1.1.0) (2022-07-23)
+
+
+### Features
+
+* **update:** … ([218fde9](https://github.com/ThornWalli/cuby-generator/commit/218fde9e324df4ebfa96a9244d424161e69e4de3))
+
 ## [1.0.18](https://github.com/ThornWalli/cuby-generator/compare/v1.0.17...v1.0.18) (2021-05-04)
 
 
